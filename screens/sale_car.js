@@ -1,0 +1,2281 @@
+import React, {Component} from 'react';
+import {
+  Text,
+  Image,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+} from 'react-native';
+import pakwheelsbottomtab from '../screens/pakwheelsbottomtab';
+import {Actions, Lightbox} from 'react-native-router-flux';
+import {Icon} from 'native-base';
+import {ScrollView} from 'react-native-gesture-handler';
+import ToggleSwitch from 'toggle-switch-react-native';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import Dialog, {
+  SlideAnimation,
+  DialogContent,
+  DialogFooter,
+  DialogButton,
+  DialogTitle,
+} from 'react-native-popup-dialog';
+import ImageLoad from 'react-native-image-placeholder';
+import * as ImagePicker from 'react-native-image-picker';
+
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
+
+class sale_car extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOn2: false,
+      location: '',
+      model: '',
+      RegisteredIn: '',
+      color: '',
+      img: null,
+      data: [],
+    };
+  }
+
+  toggle = isOn2 => {
+    this.setState({
+      isOn2: isOn2,
+    });
+  };
+
+  select_loc = location_val => {
+    this.setState({
+      location: location_val,
+    });
+    this.Loc_RBSheet.close();
+  };
+
+  select_model = model_val => {
+    this.setState({
+      model: model_val,
+    });
+    this.Car_Model_RBSheet.close();
+  };
+
+  select_Registered = RegisteredIn_val => {
+    this.setState({
+      RegisteredIn: RegisteredIn_val,
+    });
+    this.Registered_In_RBSheet.close();
+  };
+
+  select_color = color_val => {
+    this.setState({
+      color: color_val,
+    });
+    this.Body_Color_RBSheet.close();
+  };
+
+  uploadimage1 = async () => {
+    this.Photo_RBSheet.close();
+    ImagePicker.launchImageLibrary(
+      {noData: true, mediaType: 'photo', allowsEditing: true, quality: 0.7},
+      response => {
+        // console.log('response =', response);
+        if (response.didCancel) {
+          console.log('user cancelled  image picker');
+        } else if (response.error) {
+          console.log('imagepicker error : ', response.error);
+        } else if (response.customButton) {
+          console.log('user tapped  custom button : ', response.customButton);
+        } else {
+          console.log('outdoor image ', response.assets[0].uri);
+
+          let text = response.assets[0].uri;
+          console.log('outdoor image1111111111 ', text);
+
+          this.setState({img: text, imagecheck: true});
+          this.Add_button();
+        }
+      },
+    );
+  };
+
+  Check_PlatForm = () => {
+    if (Platform.OS === 'ios') {
+      this.uploadimage_Camera_1();
+      console.log('Platform Ios');
+    } else {
+      this.requestCameraPermission_1();
+      console.log('Platform Android');
+    }
+  };
+
+  Add_button = () => {
+    // console.log('Task:', this.state.Task);
+    // console.log('Date:', this.state.Date);
+    // console.log('Description:', this.state.Description);
+
+    let obj_button = {
+      image: this.state.img,
+    };
+    this.state.data.push(obj_button);
+    console.log('Image Added:', this.state.data);
+    this.setState({img: null});
+  };
+
+  createlist = () => {
+    let table = [];
+    let record = this.state.data;
+    let len = record.length;
+
+    if (record != 'fail') {
+      for (let i = 0; i < len; i++) {
+        let image = record[i].image;
+
+        table.push(
+          <View>
+            {
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: width / 2.5,
+                  alignSelf: 'center',
+                  marginTop: 20,
+                  paddingRight: 15,
+                }}>
+                <ImageLoad
+                  style={{
+                    width: '100%',
+                    height: 110,
+                  }}
+                  loadingStyle={{size: 'large', color: 'blue'}}
+                  source={{uri: image}}
+                  resizeMode="stretch"
+                  placeholderStyle={{
+                    width: '100%',
+                    height: 110,
+                  }}
+                />
+                <Icon
+                  name="checkbox-marked-circle"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    position: 'absolute',
+                    top: 3,
+                    right: 18,
+                    color: 'green',
+                    fontSize: 22,
+                  }}
+                />
+              </View>
+            }
+          </View>,
+        );
+      }
+      return table;
+    } else {
+      let img = [];
+      img.push(
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          {<View></View>}
+        </View>,
+      );
+      return img;
+    }
+  };
+
+  render() {
+    return (
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: '#064189',
+              paddingVertical: 15,
+              paddingHorizontal: 20,
+              alignItems: 'center',
+            }}>
+            <Icon name="arrowleft" type="AntDesign" style={{color: 'white'}} />
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 17,
+                fontWeight: 'bold',
+                paddingLeft: 25,
+              }}>
+              Sell Your Car
+            </Text>
+          </View>
+
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{width: width / 1.1, alignSelf: 'center'}}>
+            {this.createlist()}
+          </ScrollView>
+
+          {this.state.data == '' ? (
+            <View
+              style={{
+                paddingVertical: 30,
+                borderBottomWidth: 0.5,
+                borderBottomColor: 'lightgray',
+                backgroundColor: 'white',
+                shadowOffset: 10,
+                shadowOpacity: 10,
+                shadowColor: 'gray',
+                elevation: 5,
+              }}>
+              <TouchableOpacity onPress={() => this.Photo_RBSheet.open()}>
+                <View
+                  style={{
+                    borderWidth: 1.5,
+                    borderColor: 'dodgerblue',
+                    borderStyle: 'dashed',
+                    width: width / 1.09,
+                    alignSelf: 'center',
+                    paddingVertical: 30,
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera-plus-outline"
+                    type="MaterialCommunityIcons"
+                    style={{color: 'gray', fontSize: 40}}
+                  />
+
+                  <Text
+                    style={
+                      this.state.data == ''
+                        ? {color: '#064189'}
+                        : {color: '#064189', paddingLeft: 10}
+                    }>
+                    Add Photo
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  color: 'gray',
+                  width: '92%',
+                  alignSelf: 'center',
+                  paddingTop: 3,
+                }}
+                numberOfLines={2}>
+                Tap on images to edit them. To reorder, select the image, hold
+                and drag.
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                paddingVertical: 10,
+                // backgroundColor: 'white',
+                borderBottomWidth: 0.5,
+                borderBottomColor: 'lightgray',
+              }}>
+              <TouchableOpacity onPress={() => this.Photo_RBSheet.open()}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    backgroundColor: '#e5eefc',
+                    paddingVertical: 10,
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera-plus-outline"
+                    type="MaterialCommunityIcons"
+                    style={{color: 'gray', fontSize: 20}}
+                  />
+
+                  <Text
+                    style={
+                      this.state.data == ''
+                        ? {color: '#064189'}
+                        : {color: '#064189', paddingLeft: 10}
+                    }>
+                    Add more photos
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  color: 'gray',
+                  width: '92%',
+                  alignSelf: 'center',
+                  paddingTop: 3,
+                }}
+                numberOfLines={2}>
+                Tap on images to edit them. To reorder, select the image, hold
+                and drag.
+              </Text>
+            </View>
+          )}
+
+          <TouchableOpacity onPress={() => this.Loc_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 20,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.location == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Location
+                  </Text>
+                  {this.state.location != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.location}
+                    </Text>
+                  )}
+                </View>
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.Car_Model_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="car"
+                  type="FontAwesome5"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.model == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Car Model
+                  </Text>
+                  {this.state.model != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.model}
+                    </Text>
+                  )}
+                </View>
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.Registered_In_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.RegisteredIn == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Registered In
+                  </Text>
+                  {this.state.RegisteredIn != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.RegisteredIn}
+                    </Text>
+                  )}
+                </View>
+
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.Body_Color_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="format-color-fill"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.color == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Car Model
+                  </Text>
+                  {this.state.color != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.color}
+                    </Text>
+                  )}
+                </View>
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="speedometer"
+                type="Ionicons"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                KMS Driven
+              </Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'gray',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="Specify KMs Driven"
+                placeholderTextColor="gray"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="pricetag-multiple"
+                type="Foundation"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Price (PKR)
+              </Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'gray',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="Set a price"
+                placeholderTextColor="gray"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="layers-triple"
+                type="MaterialCommunityIcons"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Description
+              </Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'gray',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="For Example:Alloy Rims, First Owner, etc."
+                placeholderTextColor="gray"
+              />
+            </View>
+          </View>
+
+          <ScrollView
+            style={{
+              flexDirection: 'row',
+              marginTop: 20,
+              width: width / 1.1,
+              alignSelf: 'center',
+            }}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                marginHorizontal: 2,
+              }}>
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingHorizontal: 15,
+                  paddingVertical: 6,
+                  alignSelf: 'center',
+                }}>
+                Alloy Rims
+              </Text>
+            </View>
+
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                marginHorizontal: 6,
+              }}>
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingHorizontal: 15,
+                  paddingVertical: 6,
+                }}>
+                Army Officer Car
+              </Text>
+            </View>
+
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                marginHorizontal: 2,
+              }}>
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingHorizontal: 15,
+                  paddingVertical: 6,
+                }}>
+                Auction Sheet Available
+              </Text>
+            </View>
+
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                marginHorizontal: 6,
+              }}>
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingHorizontal: 15,
+                  paddingVertical: 4,
+                }}>
+                Authorized Workshop Maintained
+              </Text>
+            </View>
+          </ScrollView>
+
+          <Text
+            style={{
+              color: 'dodgerblue',
+              paddingVertical: 15,
+              fontSize: 16,
+              alignSelf: 'center',
+            }}>
+            View All Suggestions
+          </Text>
+
+          <View
+            style={{
+              backgroundColor: '#f4f2f2',
+              paddingLeft: 22,
+              paddingTop: 20,
+              paddingBottom: 10,
+            }}>
+            <Text style={{color: 'black', fontSize: 22, fontWeight: 'bold'}}>
+              Contact Information
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="man"
+                type="Ionicons"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'gray'}}>Name</Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="Informative TV"
+                placeholderTextColor="black"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="mobile1"
+                type="AntDesign"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Mobile Number
+              </Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'black',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="Enter Mobile Number"
+                placeholderTextColor="gray"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              width: width / 1.3,
+              marginRight: 13,
+              alignSelf: 'flex-end',
+              paddingTop: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View
+                style={{
+                  backgroundColor: 'green',
+                  paddingHorizontal: 5,
+                  paddingVertical: 5,
+                  borderRadius: 5,
+                }}>
+                <Icon
+                  name="whatsapp"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'white', fontSize: 25}}
+                />
+              </View>
+              <Text style={{color: 'gray', fontSize: 15, paddingLeft: 10}}>
+                Allow Whatsapp contact
+              </Text>
+            </View>
+            <ToggleSwitch
+              isOn={this.state.isOn2}
+              onColor="#FE0000"
+              offColor="#c6c5c5"
+              // label="Example label"
+              // labelStyle={{ color: "black", fontWeight: "900" }}
+              size="small"
+              onToggle={isOn2 => this.toggle(isOn2)}
+            />
+          </View>
+
+          <View
+            style={{
+              width: width / 1.08,
+              alignSelf: 'center',
+              backgroundColor: 'dodgerblue',
+              marginTop: 25,
+              marginBottom: 10,
+              alignItems: 'center',
+              paddingVertical: 8,
+              borderRadius: 4,
+            }}>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>
+              Post Your Ad
+            </Text>
+          </View>
+        </ScrollView>
+
+        <RBSheet
+          ref={ref => {
+            this.Loc_RBSheet = ref;
+          }}
+          height={720}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  paddingLeft: 20,
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  Select City
+                </Text>
+              </View>
+
+              <TouchableOpacity>
+                <View
+                  style={{
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 20,
+                  }}>
+                  <TextInput
+                    style={{
+                      width: '100%',
+                      alignSelf: 'center',
+                      height: 40,
+                      borderRadius: 3,
+                      paddingLeft: 40,
+                      color: 'darkgrey',
+                      backgroundColor: '#f4f2f2',
+                      fontSize: 16,
+                    }}
+                    placeholder="Type to refine search"
+                    placeholderTextColor="gray"
+                  />
+                  <Icon
+                    name="search"
+                    type="Ionicons"
+                    style={{
+                      color: 'gray',
+                      fontSize: 18,
+                      position: 'absolute',
+                      left: 10,
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  paddingTop: 25,
+                  paddingBottom: 10,
+                }}>
+                <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                  Popular Cities
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => this.select_loc('Islamabad')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 10,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Islamabad</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_loc('Karachi')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Karachi</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_loc('Lahore')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Lahore</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_loc('Peshawar')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Peshawar</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_loc('Quetta')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Quetta</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  paddingTop: 25,
+                  paddingBottom: 10,
+                }}>
+                <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                  Other Cities
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => this.select_loc('Abbottabad')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Abbottabad</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_loc('Gujranwala')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Gujranwala</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_loc('Jalal pur Jattan')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Jalal pur Jattan</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_loc('Qila Kalar Wala')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Qila Kalar Wala</Text>
+                  <Icon
+                    name="right"
+                    type="AntDesign"
+                    style={{fontSize: 15, color: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+
+        {/* Car Model RBSheet starts here */}
+
+        <RBSheet
+          ref={ref => {
+            this.Car_Model_RBSheet = ref;
+          }}
+          height={720}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  paddingLeft: 20,
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  Select Year
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => this.select_model('2023')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2023</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2022')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2022</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2021')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2021</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2020')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2020</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2019')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2019</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2018')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2018</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2017')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2017</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2016')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2016</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2015')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2015</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2014')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2014</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2013')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2013</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2012')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2012</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('2011')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>2011</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+
+        {/* Here starts the Registered In RBSheet */}
+
+        <RBSheet
+          ref={ref => {
+            this.Registered_In_RBSheet = ref;
+          }}
+          height={720}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  paddingLeft: 20,
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  Select Registration City
+                </Text>
+              </View>
+
+              <TouchableOpacity>
+                <View
+                  style={{
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 20,
+                  }}>
+                  <TextInput
+                    style={{
+                      width: '100%',
+                      alignSelf: 'center',
+                      height: 40,
+                      borderRadius: 3,
+                      paddingLeft: 40,
+                      color: 'darkgrey',
+                      backgroundColor: '#f4f2f2',
+                      fontSize: 16,
+                    }}
+                    placeholder="Type to refine search"
+                    placeholderTextColor="gray"
+                  />
+                  <Icon
+                    name="search"
+                    type="Ionicons"
+                    style={{
+                      color: 'gray',
+                      fontSize: 18,
+                      position: 'absolute',
+                      left: 10,
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Unregistered')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingTop: 25,
+                    paddingBottom: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Unregistered</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  paddingTop: 25,
+                  paddingBottom: 10,
+                }}>
+                <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                  Provinces
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Punjab')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 10,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Punjab</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_Registered('Sindh')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Sindh</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  paddingTop: 25,
+                  paddingBottom: 10,
+                }}>
+                <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                  Popular Cities
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Islamabad')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Islamabad</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Karachi')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Karachi</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Peshawar')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Peshawar</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  paddingTop: 25,
+                  paddingBottom: 10,
+                }}>
+                <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                  Other Cities
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Gujranwala')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Gujranwala</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Jalal Pur Jattan')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Jalal Pur Jattan</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_Registered('Qila Kalar Wala')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    paddingVertical: 15,
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Qila Kalar Wala</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+
+        {/* Here starts the Body Color RBSheet */}
+        <RBSheet
+          ref={ref => {
+            this.Body_Color_RBSheet = ref;
+          }}
+          height={520}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingVertical: 25,
+                }}>
+                <Text
+                  style={{color: '#031f5b', fontWeight: 'bold', fontSize: 19}}>
+                  Body Color
+                </Text>
+                <TouchableOpacity
+                  onPress={() => this.Body_Color_RBSheet.close()}>
+                  <Text style={{color: 'dodgerblue'}}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: width / 1.1,
+                  alignSelf: 'center',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                }}>
+                <TouchableOpacity onPress={() => this.select_color('white')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'white',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>White</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Silver')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'silver',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Silver</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Black')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'black',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Black</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Grey')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'grey',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Grey</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Blue')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: '#031f5b',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Blue</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* 2nd Row of Colors */}
+
+                <TouchableOpacity onPress={() => this.select_color('Green')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'green',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Green</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Red')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'red',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Red</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Gold')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'gold',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Gold</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Maroon')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'maroon',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Maroon</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Beige')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'beige',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Beige</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* 3rd Row of Colors */}
+
+                <TouchableOpacity onPress={() => this.select_color('Pink')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'pink',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Pink</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Brown')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'brown',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Brown</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Cyan')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'cyan',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Cyan</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Yellow')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'yellow',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Yellow</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Lavender')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'lavender',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>
+                      Lavender
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* 4th Row of Colors */}
+
+                <TouchableOpacity onPress={() => this.select_color('Purple')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'purple',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Purple</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Olive')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'olive',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Olive</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Orange')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'orange',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Orange</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Indigo')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'indigo',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Indigo</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.select_color('Teal')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'teal',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Teal</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* 5th row of Colors */}
+
+                <TouchableOpacity onPress={() => this.select_color('wheat')}>
+                  <View
+                    style={{
+                      width: width / 6,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 30,
+                    }}>
+                    <View
+                      style={{
+                        width: '58%',
+                        backgroundColor: 'wheat',
+                        paddingVertical: 16.5,
+                        borderWidth: 0.5,
+                        borderColor: 'lightgray',
+                        borderRadius: 50,
+                      }}></View>
+                    <Text style={{color: 'gray', paddingTop: 10}}>Wheat</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </RBSheet>
+
+        <RBSheet
+          ref={ref => {
+            this.Photo_RBSheet = ref;
+          }}
+          height={230}
+          openDuration={200}
+          customStyles={{
+            container: {
+              paddingHorizontal: 20,
+            },
+          }}>
+          <View>
+            <Text style={{fontSize: 18, color: 'black', marginTop: 20}}>
+              Choose an action
+            </Text>
+
+            <View style={{flexDirection: 'row', marginTop: 30}}>
+              <TouchableOpacity
+                onPress={() => this.uploadimage1()}
+                activeOpacity={0.6}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    marginLeft: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="images"
+                    type="Entypo"
+                    color="white"
+                    style={{fontSize: 30, color: 'black'}}
+                  />
+                  <Text
+                    style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>
+                    Gallery
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.Check_PlatForm()}
+                activeOpacity={0.6}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    marginLeft: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera"
+                    type="Entypo"
+                    color="white"
+                    style={{fontSize: 30, color: 'black'}}
+                  />
+                  <Text
+                    style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>
+                    Camera
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+      </View>
+    );
+  }
+}
+
+export default sale_car;

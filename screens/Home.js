@@ -1,0 +1,1084 @@
+import React, {Component} from 'react';
+import {
+  Text,
+  Image,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+} from 'react-native';
+import pakwheelsbottomtab from '../screens/pakwheelsbottomtab';
+import wheeldetails from '../screens/wheeldetails';
+import {Actions, Lightbox} from 'react-native-router-flux';
+import {Icon} from 'native-base';
+import {ScrollView} from 'react-native-gesture-handler';
+
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
+
+class Home extends React.Component {
+  render() {
+    return (
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              backgroundColor: '#064189',
+              paddingVertical: 15,
+              paddingHorizontal: 20,
+            }}>
+            <ScrollView
+              style={{flexDirection: 'row'}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 20,
+                  marginRight: 8,
+                  height:25,
+                  justifyContent:'center',
+                  alignItems:'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#056ab7',
+                    fontSize: 13,
+                    paddingHorizontal: 15,
+                  }}>
+                  Used Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  backgroundColor: '#056ab7',
+                  borderRadius: 20,
+                  marginHorizontal: 8,
+                  height:25,
+                  justifyContent:'center',
+                  alignItems:'center',
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 13,
+                    paddingHorizontal: 15,
+                  }}>
+                  New Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  backgroundColor: '#056ab7',
+                  borderRadius: 20,
+                  marginHorizontal: 8,
+                  height:25,
+                  justifyContent:'center',
+                  alignItems:'center',
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 13,
+                    paddingHorizontal: 15,
+                  }}>
+                  Bikes
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  backgroundColor: '#056ab7',
+                  borderRadius: 20,
+                  marginHorizontal: 8,
+                  height:25,
+                  justifyContent:'center',
+                  alignItems:'center',
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 13,
+                    paddingHorizontal: 15,
+                  }}>
+                  Auto Parts
+                </Text>
+              </View>
+            </ScrollView>
+
+            <View
+              style={{
+                width: width / 1.2,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 15,
+              }}>
+              <TextInput
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  height: 43,
+                  borderRadius: 5,
+                  paddingLeft: 40,
+                  color: 'darkgrey',
+                  backgroundColor: 'white',
+                  fontSize: 16,
+                }}
+                placeholder="Search Used Cars"
+                placeholderTextColor="darkgrey"
+              />
+              <Icon
+                name="search"
+                type="Ionicons"
+                style={{
+                  color: 'dodgerblue',
+                  fontSize: 20,
+                  position: 'absolute',
+                  left: 10,
+                }}
+              />
+
+              <Icon
+                name="md-location-sharp"
+                type="Ionicons"
+                style={{
+                  color: 'black',
+                  fontSize: 15,
+                  position: 'absolute',
+                  right: 70,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 12,
+                  position: 'absolute',
+                  right: 20,
+                }}>
+                All Cities
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              paddingVertical: 20,
+              width: width / 1.1,
+              alignSelf: 'center',
+            }}>
+            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 22}}>
+              Browse Used Cars
+            </Text>
+
+            <ScrollView
+              style={{
+                paddingVertical: 15,
+                borderBottomWidth: 0.3,
+                borderColor: 'lightgray',
+              }}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View
+                style={{
+                  alignSelf: 'center',
+                  flexDirection: 'row',
+                  paddingHorizontal: 10,
+                  alignSelf: 'center',
+                }}>
+                <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 15}}>
+                  Category
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 20,
+                  }}>
+                  Budget
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 20,
+                  }}>
+                  Brand
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 20,
+                  }}>
+                  Model
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 20,
+                  }}>
+                  Cities
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 20,
+                  }}>
+                  Body Types
+                </Text>
+              </View>
+            </ScrollView>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  backgroundColor: 'white',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 20,
+                  marginRight: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  shadowOffset: 5,
+                  shadowOpacity: 5,
+                  shadowColor: 'gray',
+                  elevation: 5,
+                }}>
+                <Icon
+                  name="steering"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Family Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 20,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="dingding"
+                  type="AntDesign"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Automatic Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 20,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="truck-monster"
+                  type="FontAwesome5"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Big Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 20,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="car-side"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    color: 'gray',
+                    fontSize: 30,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Small Cars
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 5,
+                  marginRight: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="steering"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Old Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 5,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="dingding"
+                  type="AntDesign"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  Imported Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 5,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="truck-monster"
+                  type="FontAwesome5"
+                  style={{
+                    color: 'gray',
+                    fontSize: 25,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  1000cc Cars
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '23.5%',
+                  height: 110,
+                  marginTop: 5,
+                  marginHorizontal: 3,
+                  borderWidth: 1,
+                  borderColor: 'lightgray',
+                  borderRadius: 5,
+                  //   shadowOffset: 5,
+                  //   shadowOpacity: 5,
+                  //   shadowColor: 'gray',
+                  //   elevation: 1,
+                }}>
+                <Icon
+                  name="car-side"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    color: 'gray',
+                    fontSize: 30,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'gray',
+                    paddingTop: 8,
+                    fontSize: 12,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  1300cc Cars
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
+                PakWheels Certified
+              </Text>
+              <Text style={{color: 'blue'}}>View All</Text>
+            </View>
+            <ScrollView
+              style={{width: width / 1.1, alignSelf: 'center'}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity onPress={() => Actions.wheeldetails()}>
+                <View
+                  style={{
+                    width: width / 1.7,
+                    marginTop: 20,
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: 'lightgray',
+                  }}>
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: 160,
+                      resizeMode: 'stretch',
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                    }}
+                    source={require('../assets/Toyota.jpg')}
+                  />
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontWeight: 'bold',
+                      fontSize: 15,
+                      paddingLeft: 10,
+                      paddingTop: 5,
+                    }}>
+                    Hyundai Elantra 2022
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 17,
+                      paddingLeft: 10,
+                      paddingTop: 5,
+                    }}>
+                    PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                  </Text>
+                  <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                    Lahore
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      paddingBottom: 15,
+                      paddingTop: 5,
+                      height: 40,
+                    }}>
+                    <View
+                      style={{
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
+                      }}>
+                      <Text style={{color: 'gray'}}>2022</Text>
+                    </View>
+                    <View
+                      style={{
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
+                      }}>
+                      <Text style={{color: 'gray'}}>82 km</Text>
+                    </View>
+                    <View
+                      style={{
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
+                      }}>
+                      <Text style={{color: 'gray'}}>petrol</Text>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  width: width / 1.7,
+                  marginTop: 20,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: 'lightgray',
+                  marginLeft: 15,
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 160,
+                    resizeMode: 'stretch',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                  source={require('../assets/Toyota.jpg')}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  Hyundai Elantra 2022
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                </Text>
+                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                  Lahore
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: 15,
+                    paddingTop: 5,
+                    height: 40,
+                  }}>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>2022</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>82 km</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>petrol</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: width / 1.7,
+                  marginTop: 20,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: 'lightgray',
+                  marginLeft: 15,
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 160,
+                    resizeMode: 'stretch',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                  source={require('../assets/Toyota.jpg')}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  Hyundai Elantra 2022
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                </Text>
+                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                  Lahore
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: 15,
+                    paddingTop: 5,
+                    height: 40,
+                  }}>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>2022</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>82 km</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>petrol</Text>
+                  </View>
+                </View>
+              </View>
+            </ScrollView>
+
+            <View
+              style={{
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
+                Featured Used Cars
+              </Text>
+              <Text style={{color: 'blue'}}>View All</Text>
+            </View>
+
+            <ScrollView
+              style={{width: width / 1.1, alignSelf: 'center'}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View
+                style={{
+                  width: width / 1.7,
+                  marginTop: 20,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: 'lightgray',
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 160,
+                    resizeMode: 'stretch',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                  source={require('../assets/Toyota.jpg')}
+                />
+                <Icon
+                  name="star-box"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: -5,
+                    color: 'maroon',
+                    fontSize: 30,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  Hyundai Elantra 2022
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                </Text>
+                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                  Lahore
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: 15,
+                    paddingTop: 5,
+                    height: 40,
+                  }}>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>2022</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>82 km</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>petrol</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: width / 1.7,
+                  marginTop: 20,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: 'lightgray',
+                  marginLeft: 15,
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 160,
+                    resizeMode: 'stretch',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                  source={require('../assets/Toyota.jpg')}
+                />
+                <Icon
+                  name="star-box"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: -5,
+                    color: 'maroon',
+                    fontSize: 30,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  Hyundai Elantra 2022
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                </Text>
+                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                  Lahore
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: 15,
+                    paddingTop: 5,
+                    height: 40,
+                  }}>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>2022</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>82 km</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>petrol</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: width / 1.7,
+                  marginTop: 20,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: 'lightgray',
+                  marginLeft: 15,
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 160,
+                    resizeMode: 'stretch',
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                  source={require('../assets/Toyota.jpg')}
+                />
+                <Icon
+                  name="star-box"
+                  type="MaterialCommunityIcons"
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: -5,
+                    color: 'maroon',
+                    fontSize: 30,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  Hyundai Elantra 2022
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    paddingLeft: 10,
+                    paddingTop: 5,
+                  }}>
+                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
+                </Text>
+                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                  Lahore
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: 15,
+                    paddingTop: 5,
+                    height: 40,
+                  }}>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>2022</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>82 km</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderEndWidth: 1,
+                      borderEndColor: 'gray',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{color: 'gray'}}>petrol</Text>
+                  </View>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+}
+
+export default Home;
