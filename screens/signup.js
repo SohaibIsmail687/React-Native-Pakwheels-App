@@ -23,6 +23,11 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 import Toast from 'react-native-simple-toast';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import ImageLoad from 'react-native-image-placeholder';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import * as ImagePicker from 'react-native-image-picker';
+import {Icon} from 'native-base';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -38,8 +43,45 @@ class signin extends React.Component {
       email: '',
       password: '',
       spinner: false,
+      dob: 'Date of Birth',
+      show_date: false,
+      img: null,
     };
   }
+
+  uploadimage1 = async () => {
+    this.RBSheet1.close();
+    ImagePicker.launchImageLibrary(
+      {noData: true, mediaType: 'photo', allowsEditing: true, quality: 0.7},
+      response => {
+        // console.log('response =', response);
+        if (response.didCancel) {
+          console.log('user cancelled  image picker');
+        } else if (response.error) {
+          console.log('imagepicker error : ', response.error);
+        } else if (response.customButton) {
+          console.log('user tapped  custom button : ', response.customButton);
+        } else {
+          console.log('outdoor image ', response.assets[0].uri);
+
+          let text = response.assets[0].uri;
+          console.log('outdoor image1111111111 ', text);
+
+          this.setState({img: text, imagecheck: true});
+        }
+      },
+    );
+  };
+
+  Check_PlatForm = () => {
+    if (Platform.OS === 'ios') {
+      this.uploadimage_Camera_1();
+      console.log('Platform Ios');
+    } else {
+      this.requestCameraPermission_1();
+      console.log('Platform Android');
+    }
+  };
 
   show_country = () => {
     this.setState({
@@ -56,25 +98,34 @@ class signin extends React.Component {
   };
 
   Sign_Up = () => {
+    const newImage = {
+      uri: this.state.img,
+      name: 'my_photo.jpg',
+      type: 'image/jpg',
+    };
+
     let uploaddata = new FormData();
 
     let name = this.state.name;
     let email = this.state.email;
     let password = this.state.password;
+    let dob = this.state.dob;
 
     console.log('namenamename => ', name);
     console.log('namenamename => ', email);
 
     console.log('namenamename => ', password);
+    console.log('namenamename => ', dob);
 
     this.setState({spinner: true});
-    this.setState({name: '', email: '', password: '',});
 
     uploaddata.append('name', name);
     uploaddata.append('email', email);
     uploaddata.append('password', password);
+    uploaddata.append('dob', dob);
+    uploaddata.append("image", newImage);
 
-    let api = 'http://192.168.100.23/api/restapi.php?action=Add_user';
+    let api = 'http://192.168.100.16/api/restapi.php?action=Add_user';
     console.log('pass => ', api);
     fetch(api, {
       method: 'POST',
@@ -112,6 +163,43 @@ class signin extends React.Component {
       });
   };
 
+  select_Date = date => {
+    console.log(date);
+    let dd = date.toISOString().split('T');
+    let d1 = dd[0];
+
+    let getAge = Math.floor((new Date() - new Date(d1).getTime()) / 3.15576e10);
+
+    console.log(d1);
+    let d2 = d1.split('-');
+    let mm = d2[1];
+    let dd_dd = d2[2];
+    let yy = d2[0];
+    let final_date = mm + '-' + dd_dd + '-' + yy;
+
+    console.log(final_date);
+
+    // console.log(date.toISOString().split('.')[0] + 'Z');
+
+    this.setState({
+      show_date: false,
+      dob: final_date,
+      age: getAge,
+    });
+  };
+
+  cancel = () => {
+    this.setState({
+      show_date: false,
+    });
+  };
+
+  showtimepicker1() {
+    this.setState({
+      show_date: true,
+    });
+  }
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white', flexWrap: 'wrap'}}>
@@ -121,7 +209,7 @@ class signin extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: '30%',
+            height: '20%',
           }}>
           <Image
             style={{
@@ -138,6 +226,51 @@ class signin extends React.Component {
             </Text>
           </View>
         </View>
+
+        {this.state.img == null ? (
+          <TouchableOpacity
+            onPress={() => this.RBSheet1.open()}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#e6e6e6',
+            }}
+            activeOpacity={0.8}>
+            <Icon
+              name="camera"
+              type="AntDesign"
+              style={{color: 'gray', fontSize: 40}}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => this.RBSheet1.open()}
+            activeOpacity={0.8}>
+            <ImageLoad
+              style={{
+                width: 100,
+                height: 100,
+                borderWidth: 2,
+                borderRadius: 150,
+                alignSelf: 'center',
+                borderColor: '#781517',
+              }}
+              loadingStyle={{size: 'large', color: 'blue'}}
+              source={{uri: this.state.img}}
+              borderRadius={150}
+              placeholderStyle={{
+                width: 100,
+                height: 100,
+                borderWidth: 2,
+                borderRadius: 150,
+                borderColor: '#781517',
+              }}
+            />
+          </TouchableOpacity>
+        )}
 
         <View
           style={{
@@ -301,6 +434,52 @@ class signin extends React.Component {
           </Text>
         </TouchableOpacity>
 
+        <Text
+          style={{
+            color: 'gray',
+            fontWeight: 'bold',
+            marginLeft: 15,
+            marginTop: 10,
+          }}>
+          Date Of Birth
+        </Text>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => this.showtimepicker1()}
+          style={{
+            width: width / 1.1,
+            alignSelf: 'center',
+            marginTop: 10,
+            height: 45,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderColor: 'gray',
+            borderRadius: 6,
+            borderWidth: 0.5,
+            paddingHorizontal: 15,
+          }}>
+          <Text
+            style={
+              this.state.dob == 'Date of Birth'
+                ? {color: 'black'}
+                : {color: 'black'}
+            }>
+            {this.state.dob}
+          </Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={this.state.show_date}
+          // date={new Date('1985-01-17',)}
+
+          mode="date"
+          // format='YYYY'
+          onConfirm={date => this.select_Date(date)}
+          onCancel={() => this.cancel()}
+          timeZoneOffsetInMinutes={0}
+          display="spinner"
+        />
+
         <View
           style={{
             alignItems: 'center',
@@ -373,6 +552,72 @@ class signin extends React.Component {
             </View>
           </View>
         )}
+
+        <RBSheet
+          ref={ref => {
+            this.RBSheet1 = ref;
+          }}
+          height={230}
+          openDuration={200}
+          customStyles={{
+            container: {
+              paddingHorizontal: 20,
+            },
+          }}>
+          <View>
+            <Text style={{fontSize: 18, color: 'black', marginTop: 20}}>
+              Choose an action
+            </Text>
+
+            <View style={{flexDirection: 'row', marginTop: 30}}>
+              <TouchableOpacity
+                onPress={() => this.uploadimage1()}
+                activeOpacity={0.6}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    marginLeft: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="images"
+                    type="Entypo"
+                    color="white"
+                    style={{fontSize: 30, color: 'black'}}
+                  />
+                  <Text
+                    style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>
+                    Gallery
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.Check_PlatForm()}
+                activeOpacity={0.6}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    marginLeft: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera"
+                    type="Entypo"
+                    color="white"
+                    style={{fontSize: 30, color: 'black'}}
+                  />
+                  <Text
+                    style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>
+                    Camera
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
       </View>
     );
   }
