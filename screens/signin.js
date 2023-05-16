@@ -11,11 +11,71 @@ import {
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {Icon} from 'native-base';
+import Connection from '../connection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
 class signin extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      placeholder: '+92',
+      show: false,
+      name: '',
+      email: '',
+      password: '',
+      spinner: false,
+      dob: 'Date of Birth',
+      show_date: false,
+      img: null,
+    };
+  }
+
+  login = () => {
+    let uploaddata = new FormData();
+    let email = this.state.email;
+    let password = this.state.password;
+
+    if (email == '') {
+      alert('Please enter email.');
+    } else if (password == '') {
+      alert('Please enter password.');
+    } else {
+      this.setState({spinner: true});
+      uploaddata.append('email', email);
+      uploaddata.append('password', password);
+      let api = Connection + 'restapi.php?action=login';
+
+      console.log('pass => ', api);
+      fetch(api, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          otherHeader: 'foo',
+        },
+        body: uploaddata,
+      })
+        .then(response => response.json())
+        .then(response => {
+          if (response.response == 'fail') {
+            this.setState({spinner: false});
+            alert('Invalid email or password.');
+          } else {
+            this.setState({spinner: false});
+            AsyncStorage.setItem('user', JSON.stringify(response.response));
+
+            Actions.pakwheelsbottomtab({});
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -74,6 +134,7 @@ class signin extends React.Component {
             }}
             placeholder="Enter Username"
             placeholderTextColor="grey"
+            onChangeText={email => this.setState({email})}
           />
 
           <View style={{marginLeft: 10, marginTop: 15}}>
@@ -94,23 +155,26 @@ class signin extends React.Component {
             }}
             placeholder="Enter Password"
             placeholderTextColor="grey"
+            onChangeText={password => this.setState({password})}
           />
         </View>
 
-        <View
-          style={{
-            backgroundColor: 'dodgerblue',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-            borderRadius: 6,
-            width: width / 1.05,
-            height: 45,
-          }}>
-          <Text style={{fontSize: 15, color: 'white', fontWeight: 'bold'}}>
-            LOGIN
-          </Text>
-        </View>
+        <TouchableOpacity onPress={() => this.login()}>
+          <View
+            style={{
+              backgroundColor: 'dodgerblue',
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center',
+              borderRadius: 6,
+              width: width / 1.05,
+              height: 45,
+            }}>
+            <Text style={{fontSize: 15, color: 'white', fontWeight: 'bold'}}>
+              LOGIN
+            </Text>
+          </View>
+        </TouchableOpacity>
 
         <View
           style={{

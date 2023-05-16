@@ -9,12 +9,20 @@ import ad_details from './screens/ad_details';
 import sale_car from './screens/sale_car';
 import signin from './screens/signin';
 import signup from './screens/signup';
+import Splash from './screens/Splash';
 
 export default function App() {
   return (
     <Router>
       <Stack key="root">
-      <Scene
+        <Scene
+          key="Splash"
+          component={Splash}
+          title="Splash"
+          hideNavBar={true}
+          initial
+        />
+        <Scene
           key="signin"
           component={signin}
           title="signin"
@@ -26,7 +34,7 @@ export default function App() {
           component={signup}
           title="signup"
           hideNavBar={true}
-          initial
+          // initial
         />
         <Scene
           key="Home"

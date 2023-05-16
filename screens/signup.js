@@ -123,7 +123,7 @@ class signin extends React.Component {
     uploaddata.append('email', email);
     uploaddata.append('password', password);
     uploaddata.append('dob', dob);
-    uploaddata.append("image", newImage);
+    uploaddata.append('image', newImage);
 
     let api = 'http://192.168.100.16/api/restapi.php?action=Add_user';
     console.log('pass => ', api);
@@ -417,29 +417,12 @@ class signin extends React.Component {
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={() => this.Sign_Up()}
-          style={{
-            backgroundColor: 'dodgerblue',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 6,
-            marginLeft: 10,
-            width: '95%',
-            height: 45,
-            marginTop: 50,
-          }}>
-          <Text style={{fontSize: 15, color: 'white', fontWeight: 'bold'}}>
-            REGISTER
-          </Text>
-        </TouchableOpacity>
-
         <Text
           style={{
             color: 'gray',
             fontWeight: 'bold',
             marginLeft: 15,
-            marginTop: 10,
+            marginTop: 30,
           }}>
           Date Of Birth
         </Text>
@@ -479,6 +462,23 @@ class signin extends React.Component {
           timeZoneOffsetInMinutes={0}
           display="spinner"
         />
+
+        <TouchableOpacity
+          onPress={() => this.Sign_Up()}
+          style={{
+            backgroundColor: 'dodgerblue',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 6,
+            marginLeft: 10,
+            width: '95%',
+            height: 45,
+            marginTop: 50,
+          }}>
+          <Text style={{fontSize: 15, color: 'white', fontWeight: 'bold'}}>
+            REGISTER
+          </Text>
+        </TouchableOpacity>
 
         <View
           style={{
