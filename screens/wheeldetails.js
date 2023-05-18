@@ -122,7 +122,7 @@ class wheeldetails extends React.Component {
           <View
             style={{width: width / 1.1, alignSelf: 'center', marginTop: 10}}>
             <Text style={{color: 'black', fontSize: 20}}>
-              Hyundai Sonata 2.5
+              {this.props.name1}
             </Text>
             <Text
               style={{

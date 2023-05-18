@@ -28,6 +28,7 @@ import ImageLoad from 'react-native-image-placeholder';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import * as ImagePicker from 'react-native-image-picker';
 import {Icon} from 'native-base';
+import Connection from '../connection';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -125,7 +126,7 @@ class signin extends React.Component {
     uploaddata.append('dob', dob);
     uploaddata.append('image', newImage);
 
-    let api = 'http://192.168.100.16/api/restapi.php?action=Add_user';
+    let api = Connection + 'restapi.php?action=Add_user';
     console.log('pass => ', api);
     fetch(api, {
       method: 'POST',

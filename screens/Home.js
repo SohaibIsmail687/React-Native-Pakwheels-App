@@ -12,11 +12,192 @@ import wheeldetails from '../screens/wheeldetails';
 import {Actions, Lightbox} from 'react-native-router-flux';
 import {Icon} from 'native-base';
 import {ScrollView} from 'react-native-gesture-handler';
+import Connection from '../connection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImageLoad from 'react-native-image-placeholder';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data5: [],
+    };
+  }
+
+  componentDidMount = async () => {
+    // this.backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   this.backAction,
+    // );
+
+    let user = await AsyncStorage.getItem('user');
+    let parsed = JSON.parse(user);
+    console.log('kkkkkkkkkkkk', user);
+    let id = parsed[0].id;
+    this.setState({
+      id: id,
+    });
+    console.log('kkkkkkkkkkkk', this.state.id);
+    this.All_Ad();
+  };
+
+  All_Ad = () => {
+    let api = Connection + 'restapi.php?action=All_Ad';
+    console.log('pass => ', api);
+    fetch(api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+      // body: uploaddata,
+    })
+      .then(response => response.json())
+      .then(response => {
+        let table = [];
+        let record = response.response;
+        let len = record.length;
+
+        if (record != 'fail') {
+          this.setState({
+            data5: record,
+            skalton: false,
+          });
+          console.log(record);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  createtable1 = () => {
+    let table = [];
+    let record1 = this.state.data5;
+    let len = record1.length;
+    if (record1 != 'fail') {
+      for (let i = 0; i < len; i++) {
+        let id = record1[i].id;
+        let userid = record1[i].user_id;
+        let location = record1[i].location;
+        let model = record1[i].model;
+        let registeredIn = record1[i].registeredin;
+        let color = record1[i].color;
+        let kms = record1[i].kms;
+        let price = record1[i].price;
+        let desc = record1[i].desc;
+        let name = record1[i].name;
+        let phone = record1[i].phone;
+        let profile1 = record1[i].photo;
+        let profile = Connection + 'images/' + profile1;
+        console.log(profile)
+        table.push(
+          <View>
+            {
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  Actions.wheeldetails({
+                    name1: name,
+                  })
+                }
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginHorizontal: 5,
+                  marginVertical: 5,
+                  width: width / 3.2,
+                  borderRadius: 5,
+                  backgroundColor: 'white',
+                  paddingVertical: 5,
+                  shadowOffset: {width: 0, height: 2},
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                  }}>
+                  <Text> </Text>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 5,
+                    }}>
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        color: 'black',
+                        fontSize: 12,
+                        fontFamily: 'DMSans-Bold',
+                      }}>
+                      {name}{' '}
+                    </Text>
+
+                    <Icon
+                      name="star"
+                      type="AntDesign"
+                      style={{color: 'gold', fontSize: 13}}
+                    />
+                  </View>
+                </View>
+
+                <ImageLoad
+                  style={{width: 80, height: 80, borderRadius: 100}}
+                  loadingStyle={{size: 'large', color: 'blue'}}
+                  source={{uri: profile}}
+                  borderRadius={100}
+                  placeholderStyle={{width: 80, height: 80, borderRadius: 100}}
+                />
+
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    color: 'black',
+                    fontSize: 16,
+                    marginTop: 5,
+                    fontFamily: 'DMSans-Bold',
+                  }}
+                  numberOfLines={1}>
+                  {name}
+                </Text>
+
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    color: '#235fa9',
+                    fontSize: 12,
+                    fontFamily: 'DMSans-Bold',
+                  }}>
+                  ${price} / hr
+                </Text>
+              </TouchableOpacity>
+            }
+          </View>,
+        );
+      }
+      return table;
+    } else {
+      let img = [];
+      img.push(
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          {<View></View>}
+        </View>,
+      );
+      return img;
+    }
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -36,9 +217,9 @@ class Home extends React.Component {
                   backgroundColor: 'white',
                   borderRadius: 20,
                   marginRight: 8,
-                  height:25,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text
                   style={{
@@ -55,9 +236,9 @@ class Home extends React.Component {
                   backgroundColor: '#056ab7',
                   borderRadius: 20,
                   marginHorizontal: 8,
-                  height:25,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text
                   style={{
@@ -74,9 +255,9 @@ class Home extends React.Component {
                   backgroundColor: '#056ab7',
                   borderRadius: 20,
                   marginHorizontal: 8,
-                  height:25,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text
                   style={{
@@ -93,9 +274,9 @@ class Home extends React.Component {
                   backgroundColor: '#056ab7',
                   borderRadius: 20,
                   marginHorizontal: 8,
-                  height:25,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text
                   style={{
@@ -546,6 +727,8 @@ class Home extends React.Component {
                 </Text>
               </View>
             </View>
+
+            {this.createtable1()}
 
             <View
               style={{

@@ -8,11 +8,13 @@ import {
   Dimensions,
 } from 'react-native';
 import pakwheelsbottomtab from '../screens/pakwheelsbottomtab';
+import pakwheelsads from '../screens/pakwheelsads';
 import {Actions, Lightbox} from 'react-native-router-flux';
 import {Icon} from 'native-base';
 import {ScrollView} from 'react-native-gesture-handler';
 import ToggleSwitch from 'toggle-switch-react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import Toast from 'react-native-simple-toast';
 import Dialog, {
   SlideAnimation,
   DialogContent,
@@ -254,7 +256,7 @@ class sale_car extends React.Component {
     uploaddata.append('price', price);
     uploaddata.append('description', description);
     uploaddata.append('name', name);
-    uploaddata.append('mobile', mobile);
+    uploaddata.append('mobile', mobile); 
 
     let api = Connection + 'restapi.php?action=Insert_Ads';
     console.log('pass => ', api);
@@ -286,6 +288,7 @@ class sale_car extends React.Component {
           });
 
           Toast.show('You successfully posted your ad.');
+          Actions.pakwheelsads();
         }
       })
       .catch(error => {
