@@ -22,6 +22,19 @@ import Dialog, {
 } from 'react-native-popup-dialog';
 import ImageLoad from 'react-native-image-placeholder';
 import * as ImagePicker from 'react-native-image-picker';
+import Connection from '../connection';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -32,14 +45,36 @@ class sale_car extends React.Component {
 
     this.state = {
       isOn2: false,
+      img: null,
       location: '',
       model: '',
       RegisteredIn: '',
+      kmsdriven: '',
+      price: '',
+      description: '',
+      name: '',
+      mobile: '',
       color: '',
-      img: null,
       data: [],
     };
   }
+
+  componentDidMount = async () => {
+    // this.backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   this.backAction,
+    // );
+
+    let user = await AsyncStorage.getItem('user');
+    let parsed = JSON.parse(user);
+    console.log('kkkkkkkkkkkk', user);
+    let id = parsed[0].id;
+    this.setState({
+      id: id,
+    });
+    console.log('kkkkkkkkkkkk', this.state.id);
+    // this.get_appointments_user();
+  };
 
   toggle = isOn2 => {
     this.setState({
@@ -94,7 +129,7 @@ class sale_car extends React.Component {
           console.log('outdoor image1111111111 ', text);
 
           this.setState({img: text, imagecheck: true});
-          this.Add_button();
+          // this.Add_button();
         }
       },
     );
@@ -185,6 +220,79 @@ class sale_car extends React.Component {
     }
   };
 
+  Post_Ad = () => {
+    const newImage = {
+      uri: this.state.img,
+      name: 'my_photo.jpg',
+      type: 'image/jpg',
+    };
+
+    let uploaddata = new FormData();
+
+    let location = this.state.location;
+    let model = this.state.model;
+    let RegisteredIn = this.state.RegisteredIn;
+    let color = this.state.color;
+    let kmsdriven = this.state.kmsdriven;
+    let price = this.state.price;
+    let description = this.state.description;
+    let name = this.state.name;
+    let mobile = this.state.mobile;
+
+    console.log('namenamename => ', location);
+    console.log('namenamename => ', kmsdriven);
+
+    this.setState({spinner: true});
+
+    uploaddata.append('id', this.state.id);
+    uploaddata.append('image', newImage);
+    uploaddata.append('location', location);
+    uploaddata.append('model', model);
+    uploaddata.append('RegisteredIn', RegisteredIn);
+    uploaddata.append('color', color);
+    uploaddata.append('kmsdriven', kmsdriven);
+    uploaddata.append('price', price);
+    uploaddata.append('description', description);
+    uploaddata.append('name', name);
+    uploaddata.append('mobile', mobile);
+
+    let api = Connection + 'restapi.php?action=Insert_Ads';
+    console.log('pass => ', api);
+    fetch(api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+      body: uploaddata,
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log('response', response.response);
+
+        if (response.response == 'repeat') {
+          this.setState({
+            spinner: false,
+          });
+          alert('This email already exist');
+        } else if (response.response == 'fail') {
+          this.setState({
+            spinner: false,
+          });
+          alert(this.props.Something_went_wrong);
+        } else {
+          this.setState({
+            spinner: false,
+          });
+
+          Toast.show('You successfully posted your ad.');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -209,14 +317,14 @@ class sale_car extends React.Component {
             </Text>
           </View>
 
-          <ScrollView
+          {/* <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             style={{width: width / 1.1, alignSelf: 'center'}}>
             {this.createlist()}
-          </ScrollView>
+          </ScrollView> */}
 
-          {this.state.data == '' ? (
+          {this.state.img == null ? (
             <View
               style={{
                 paddingVertical: 30,
@@ -268,49 +376,72 @@ class sale_car extends React.Component {
               </Text>
             </View>
           ) : (
-            <View
-              style={{
-                paddingVertical: 10,
-                // backgroundColor: 'white',
-                borderBottomWidth: 0.5,
-                borderBottomColor: 'lightgray',
-              }}>
-              <TouchableOpacity onPress={() => this.Photo_RBSheet.open()}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    backgroundColor: '#e5eefc',
-                    paddingVertical: 10,
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="camera-plus-outline"
-                    type="MaterialCommunityIcons"
-                    style={{color: 'gray', fontSize: 20}}
-                  />
-
-                  <Text
-                    style={
-                      this.state.data == ''
-                        ? {color: '#064189'}
-                        : {color: '#064189', paddingLeft: 10}
-                    }>
-                    Add more photos
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <Text
+            <View>
+              <ImageLoad
                 style={{
-                  color: 'gray',
-                  width: '92%',
+                  width: 100,
+                  height: 100,
+                  borderWidth: 2,
+                  borderRadius: 150,
                   alignSelf: 'center',
-                  paddingTop: 3,
+                  borderColor: '#781517',
                 }}
-                numberOfLines={2}>
-                Tap on images to edit them. To reorder, select the image, hold
-                and drag.
-              </Text>
+                loadingStyle={{size: 'large', color: 'blue'}}
+                source={{uri: this.state.img}}
+                borderRadius={150}
+                placeholderStyle={{
+                  width: 100,
+                  height: 100,
+                  borderWidth: 2,
+                  borderRadius: 150,
+                  borderColor: '#781517',
+                }}
+              />
+
+              <View
+                style={{
+                  paddingVertical: 10,
+                  // backgroundColor: 'white',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <TouchableOpacity onPress={() => this.Photo_RBSheet.open()}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      backgroundColor: '#e5eefc',
+                      paddingVertical: 10,
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      name="camera-plus-outline"
+                      type="MaterialCommunityIcons"
+                      style={{color: 'gray', fontSize: 20}}
+                    />
+
+                    <Text
+                      style={
+                        this.state.data == ''
+                          ? {color: '#064189'}
+                          : {color: '#064189', paddingLeft: 10}
+                      }>
+                      Add more photos
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    color: 'gray',
+                    width: '92%',
+                    alignSelf: 'center',
+                    paddingTop: 3,
+                  }}
+                  numberOfLines={2}>
+                  Tap on images to edit them. To reorder, select the image, hold
+                  and drag.
+                </Text>
+              </View>
             </View>
           )}
 
@@ -564,7 +695,7 @@ class sale_car extends React.Component {
                           }
                         : {color: 'black'}
                     }>
-                    Car Model
+                    Color
                   </Text>
                   {this.state.color != '' && (
                     <Text
@@ -629,6 +760,8 @@ class sale_car extends React.Component {
                 }}
                 placeholder="Specify KMs Driven"
                 placeholderTextColor="gray"
+                onChangeText={kmsdriven => this.setState({kmsdriven})}
+                value={this.state.kmsdriven}
               />
             </View>
           </View>
@@ -675,6 +808,8 @@ class sale_car extends React.Component {
                 }}
                 placeholder="Set a price"
                 placeholderTextColor="gray"
+                onChangeText={price => this.setState({price})}
+                value={this.state.price}
               />
             </View>
           </View>
@@ -721,6 +856,8 @@ class sale_car extends React.Component {
                 }}
                 placeholder="For Example:Alloy Rims, First Owner, etc."
                 placeholderTextColor="gray"
+                onChangeText={description => this.setState({description})}
+                value={this.state.description}
               />
             </View>
           </View>
@@ -867,6 +1004,8 @@ class sale_car extends React.Component {
                 }}
                 placeholder="Informative TV"
                 placeholderTextColor="black"
+                onChangeText={name => this.setState({name})}
+                value={this.state.name}
               />
             </View>
           </View>
@@ -913,6 +1052,8 @@ class sale_car extends React.Component {
                 }}
                 placeholder="Enter Mobile Number"
                 placeholderTextColor="gray"
+                onChangeText={mobile => this.setState({mobile})}
+                value={this.state.mobile}
               />
             </View>
           </View>
@@ -956,21 +1097,23 @@ class sale_car extends React.Component {
             />
           </View>
 
-          <View
-            style={{
-              width: width / 1.08,
-              alignSelf: 'center',
-              backgroundColor: 'dodgerblue',
-              marginTop: 25,
-              marginBottom: 10,
-              alignItems: 'center',
-              paddingVertical: 8,
-              borderRadius: 4,
-            }}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>
-              Post Your Ad
-            </Text>
-          </View>
+          <TouchableOpacity onPress={() => this.Post_Ad()}>
+            <View
+              style={{
+                width: width / 1.08,
+                alignSelf: 'center',
+                backgroundColor: 'dodgerblue',
+                marginTop: 25,
+                marginBottom: 10,
+                alignItems: 'center',
+                paddingVertical: 8,
+                borderRadius: 4,
+              }}>
+              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>
+                Post Your Ad
+              </Text>
+            </View>
+          </TouchableOpacity>
         </ScrollView>
 
         <RBSheet
