@@ -12,19 +12,27 @@ import Home from '../screens/Home';
 import {Actions, Lightbox} from 'react-native-router-flux';
 import {Icon} from 'native-base';
 import {ScrollView} from 'react-native-gesture-handler';
+import ImageLoad from 'react-native-image-placeholder';
+import {Call} from 'react-native-openanything';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
 class wheeldetails extends React.Component {
+  call = () => {
+    Call(this.props.phone).catch(err => console.error(err));
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{width: width}}>
-            <Image
+            <ImageLoad
               style={{width: '100%', height: 250, resizeMode: 'stretch'}}
-              source={require('../assets/Toyota.jpg')}
+              loadingStyle={{size: 'large', color: 'blue'}}
+              source={{uri: this.props.profile}}
+              placeholderStyle={{width: '100%', height: 250}}
             />
             <View
               style={{
@@ -131,14 +139,14 @@ class wheeldetails extends React.Component {
                 fontWeight: 'bold',
                 paddingVertical: 2,
               }}>
-              PKR 12,900,000
+              PKR {this.props.price}
             </Text>
             <Text
               style={{
                 color: 'gray',
                 fontSize: 15,
               }}>
-              Faisal Town, Lahore
+              Faisal Town, {this.props.location}
             </Text>
           </View>
 
@@ -201,7 +209,7 @@ class wheeldetails extends React.Component {
                   fontWeight: 'bold',
                   paddingTop: 5,
                 }}>
-                2023
+                {this.props.model}
               </Text>
             </View>
 
@@ -218,7 +226,7 @@ class wheeldetails extends React.Component {
                   fontWeight: 'bold',
                   paddingTop: 5,
                 }}>
-                17 Km
+                {this.props.kms} Km
               </Text>
             </View>
 
@@ -282,7 +290,7 @@ class wheeldetails extends React.Component {
                 fontSize: 16,
                 paddingTop: 5,
               }}>
-              Unregistered
+              {this.props.registeredIn}
             </Text>
           </View>
 
@@ -312,7 +320,7 @@ class wheeldetails extends React.Component {
                 fontSize: 16,
                 paddingTop: 5,
               }}>
-              Black
+              {this.props.color}
             </Text>
           </View>
 
@@ -425,7 +433,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 15,
                 paddingLeft: 5,
               }}>
-              - Pak Wheels inspected car
+              - Model {this.props.model}
             </Text>
 
             <Text
@@ -435,7 +443,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - Inspection report attached
+              - color {this.props.color}
             </Text>
 
             <Text
@@ -445,7 +453,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - Original No Plates Available
+              - {this.props.kms}
             </Text>
 
             <Text
@@ -455,7 +463,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - 1st Owner
+              - {this.props.desc}
             </Text>
 
             <Text
@@ -465,7 +473,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - Token Taxes up to date
+              - Price PKR {this.props.price}
             </Text>
 
             <Text
@@ -475,7 +483,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - Model 2016
+              - Model {this.props.model}
             </Text>
 
             <Text
@@ -485,7 +493,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - Registered 2016
+              - Registered {this.props.registeredIn}
             </Text>
 
             <Text
@@ -495,7 +503,7 @@ class wheeldetails extends React.Component {
                 paddingTop: 2,
                 paddingLeft: 5,
               }}>
-              - 2 keys available
+              - 2 keys
             </Text>
           </View>
 
@@ -976,7 +984,8 @@ class wheeldetails extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <View
+          <TouchableOpacity
+            onPress={() => this.call()}
             style={{
               flexDirection: 'row',
               backgroundColor: 'dodgerblue',
@@ -1000,7 +1009,7 @@ class wheeldetails extends React.Component {
               }}>
               Call
             </Text>
-          </View>
+          </TouchableOpacity>
 
           <View
             style={{

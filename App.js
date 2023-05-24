@@ -10,7 +10,9 @@ import sale_car from './screens/sale_car';
 import signin from './screens/signin';
 import signup from './screens/signup';
 import Splash from './screens/Splash';
+import Edit_My_Ads from './screens/Edit_My_Ads';
 
+console.disableYellowBox = true;
 export default function App() {
   return (
     <Router>
@@ -75,6 +77,13 @@ export default function App() {
           key="sale_car"
           component={sale_car}
           title="sale_car"
+          hideNavBar={true}
+          // initial
+        />
+        <Scene
+          key="Edit_My_Ads"
+          component={Edit_My_Ads}
+          title="Edit_My_Ads"
           hideNavBar={true}
           // initial
         />

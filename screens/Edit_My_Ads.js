@@ -41,12 +41,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
-class sale_car extends React.Component {
+class Edit_My_Ads extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isOn2: false,
+      id_for_edit:'',
       img: null,
       location: '',
       model: '',
@@ -62,10 +63,6 @@ class sale_car extends React.Component {
   }
 
   componentDidMount = async () => {
-    // this.backHandler = BackHandler.addEventListener(
-    //   'hardwareBackPress',
-    //   this.backAction,
-    // );
 
     let user = await AsyncStorage.getItem('user');
     let parsed = JSON.parse(user);
@@ -73,8 +70,21 @@ class sale_car extends React.Component {
     let id = parsed[0].id;
     this.setState({
       id: id,
+      img:this.props.img,
+      location: this.props.location,
+      model: this.props.model,
+      RegisteredIn: this.props.RegisteredIn,
+      kmsdriven: this.props.kmsdriven,
+      price: this.props.price,
+      description: this.props.description,
+      name: this.props.name1,
+      mobile: this.props.mobile,
+      color: this.props.color,
+      id_for_edit:this.props.id_for_remove_ad,
+
+
     });
-    console.log('kkkkkkkkkkkk', this.state.id);
+    console.log('id_for_removeid_for_removeid_for_removeid_for_remove', this.props.id_for_remove_ad);
     // this.get_appointments_user();
   };
 
@@ -222,7 +232,7 @@ class sale_car extends React.Component {
     }
   };
 
-  Post_Ad = () => {
+  Edit_Ad = () => {
     const newImage = {
       uri: this.state.img,
       name: 'my_photo.jpg',
@@ -256,9 +266,11 @@ class sale_car extends React.Component {
     uploaddata.append('price', price);
     uploaddata.append('description', description);
     uploaddata.append('name', name);
-    uploaddata.append('mobile', mobile); 
+    uploaddata.append('mobile', mobile);
+    uploaddata.append('id_for_edit', this.state.id_for_edit);
+    
 
-    let api = Connection + 'restapi.php?action=Insert_Ads';
+    let api = Connection + 'restapi.php?action=Edit_Ads';
     console.log('pass => ', api);
     fetch(api, {
       method: 'POST',
@@ -272,16 +284,13 @@ class sale_car extends React.Component {
       .then(response => {
         console.log('response', response.response);
 
-        if (response.response == 'repeat') {
+        
+        
+        if (response.response == 'fail') {
           this.setState({
             spinner: false,
           });
-          alert('This email already exist');
-        } else if (response.response == 'fail') {
-          this.setState({
-            spinner: false,
-          });
-          alert(this.props.Something_went_wrong);
+          alert('fail');
         } else {
           this.setState({
             spinner: false,
@@ -308,7 +317,12 @@ class sale_car extends React.Component {
               paddingHorizontal: 20,
               alignItems: 'center',
             }}>
-            <Icon onPress={()=>Actions.pakwheelsads()} name="arrowleft" type="AntDesign" style={{color: 'white'}} />
+            <Icon
+              onPress={() => Actions.pakwheelsads()}
+              name="arrowleft"
+              type="AntDesign"
+              style={{color: 'white'}}
+            />
             <Text
               style={{
                 color: 'white',
@@ -1100,7 +1114,7 @@ class sale_car extends React.Component {
             />
           </View>
 
-          <TouchableOpacity onPress={() => this.Post_Ad()}>
+          <TouchableOpacity onPress={() => this.Edit_Ad()}>
             <View
               style={{
                 width: width / 1.08,
@@ -2424,4 +2438,4 @@ class sale_car extends React.Component {
   }
 }
 
-export default sale_car;
+export default Edit_My_Ads;

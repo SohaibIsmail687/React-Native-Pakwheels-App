@@ -82,6 +82,7 @@ class Splash extends React.Component {
               alignItems: 'center',
               width: '80%',
               height: '90%',
+              borderRadius:50,
             }}>
             <Image
               source={require('../assets/Sonam.jpg')}

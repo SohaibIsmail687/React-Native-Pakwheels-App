@@ -15,6 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Connection from '../connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageLoad from 'react-native-image-placeholder';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -94,93 +95,327 @@ class Home extends React.Component {
         let phone = record1[i].phone;
         let profile1 = record1[i].photo;
         let profile = Connection + 'images/' + profile1;
-        console.log(profile)
+        console.log(profile);
         table.push(
           <View>
             {
+              // <TouchableOpacity
+              //   activeOpacity={0.8}
+              //   onPress={() =>
+              //     Actions.wheeldetails({
+              //       id:id,
+              //       userid:userid,
+              //       location:location,
+              //       model:model,
+              //       registeredIn:registeredIn,
+              //       color:color,
+              //       kms:kms,
+              //       price:price,
+              //       desc:desc,
+              //       name1: name,
+              //       phone:phone,
+              //       profile:profile,
+
+              //     })
+              //   }
+              //   style={{
+              //     alignItems: 'center',
+              //     justifyContent: 'center',
+              //     marginRight: 8,
+              //     marginTop: 10,
+              //     marginVertical: 5,
+              //     width: width / 3.2,
+              //     borderRadius: 5,
+              //     backgroundColor: 'white',
+              //     paddingVertical: 5,
+              //     shadowOffset: {width: 0, height: 2},
+              //     shadowOpacity: 0.25,
+              //     shadowRadius: 3.84,
+              //     elevation: 5,
+              //   }}>
+              //   <View
+              //     style={{
+              //       flexDirection: 'row',
+              //       alignItems: 'center',
+              //       justifyContent: 'space-between',
+              //       width: '100%',
+              //     }}>
+              //     <Text> </Text>
+
+              //     <View
+              //       style={{
+              //         flexDirection: 'row',
+              //         alignItems: 'center',
+              //         marginRight: 5,
+              //       }}>
+              //       <Text
+              //         allowFontScaling={false}
+              //         style={{
+              //           color: 'black',
+              //           fontSize: 12,
+              //           fontFamily: 'DMSans-Bold',
+              //         }}>
+              //         {name}{' '}
+              //       </Text>
+
+              //       <Icon
+              //         name="star"
+              //         type="AntDesign"
+              //         style={{color: 'gold', fontSize: 13}}
+              //       />
+              //     </View>
+              //   </View>
+
+              //   <ImageLoad
+              //     style={{width: 80, height: 80, borderRadius: 100}}
+              //     loadingStyle={{size: 'large', color: 'blue'}}
+              //     source={{uri: profile}}
+              //     borderRadius={100}
+              //     placeholderStyle={{width: 80, height: 80, borderRadius: 100}}
+              //   />
+
+              //   <Text
+              //     allowFontScaling={false}
+              //     style={{
+              //       color: 'black',
+              //       fontSize: 16,
+              //       marginTop: 5,
+              //       fontFamily: 'DMSans-Bold',
+              //     }}
+              //     numberOfLines={1}>
+              //     {name}
+              //   </Text>
+
+              //   <Text
+              //     allowFontScaling={false}
+              //     style={{
+              //       color: '#235fa9',
+              //       fontSize: 12,
+              //       fontFamily: 'DMSans-Bold',
+              //     }}>
+              //     ${price} / hr
+              //   </Text>
+              // </TouchableOpacity>
+
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
                   Actions.wheeldetails({
                     name1: name,
                   })
-                }
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginHorizontal: 5,
-                  marginVertical: 5,
-                  width: width / 3.2,
-                  borderRadius: 5,
-                  backgroundColor: 'white',
-                  paddingVertical: 5,
-                  shadowOffset: {width: 0, height: 2},
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                  }}>
-                  <Text> </Text>
-
+                }>
+                <View style={{backgroundColor: 'white'}}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginRight: 5,
+                      width: width / 1.1,
+                      alignSelf: 'center',
+                      backgroundColor: 'white',
+                      marginTop: 10,
+                      marginRight: 10,
+                      borderWidth: 1,
+                      borderRadius: 10,
+                      borderColor: 'lightgray',
+                      marginBottom: 5,
                     }}>
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        color: 'black',
-                        fontSize: 12,
-                        fontFamily: 'DMSans-Bold',
-                      }}>
-                      {name}{' '}
-                    </Text>
+                    <TouchableOpacity onPress={() => Actions.wheeldetails()}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          paddingLeft: 8,
+                          paddingTop: 8,
+                        }}>
+                        <View style={{width: '40%'}}>
+                          <ImageLoad
+                            style={{
+                              width: '100%',
+                              height: 100,
+                              resizeMode: 'stretch',
+                              borderRadius: 10,
+                            }}
+                            loadingStyle={{size: 'large', color: 'blue'}}
+                            source={{uri: profile}}
+                            borderRadius={10}
+                            placeholderStyle={{
+                              width: '100%',
+                              height: 100,
+                              borderRadius: 10,
+                            }}
+                          />
 
-                    <Icon
-                      name="star"
-                      type="AntDesign"
-                      style={{color: 'gold', fontSize: 13}}
-                    />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <Icon
+                              name="eye"
+                              type="Ionicons"
+                              style={{
+                                position: 'absolute',
+                                bottom: 5,
+                                left: 10,
+                                color: 'white',
+                                fontSize: 15,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                position: 'absolute',
+                                bottom: 5,
+                                left: 30,
+                                color: 'white',
+                                fontSize: 12,
+                              }}>
+                              0
+                            </Text>
+
+                            <Icon
+                              name="call"
+                              type="Ionicons"
+                              style={{
+                                position: 'absolute',
+                                bottom: 5,
+                                right: 20,
+                                color: 'white',
+                                fontSize: 15,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                position: 'absolute',
+                                bottom: 5,
+                                right: 10,
+                                color: 'white',
+                                fontSize: 12,
+                              }}>
+                              0
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View>
+                          <Text
+                            style={{
+                              color: 'black',
+                              fontSize: 15,
+                              paddingLeft: 10,
+                            }}>
+                            {name}
+                          </Text>
+                          <Text
+                            style={{
+                              color: 'black',
+                              fontSize: 17,
+                              paddingLeft: 10,
+                            }}>
+                            PKR{' '}
+                            <Text style={{fontWeight: 'bold'}}>{price}</Text>
+                          </Text>
+                          <Text style={{color: 'gray', paddingLeft: 10}}>
+                            {location}
+                          </Text>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              paddingBottom: 15,
+                              height: 30,
+                            }}>
+                            <View
+                              style={{
+                                borderEndWidth: 1,
+                                borderEndColor: 'gray',
+                                paddingLeft: 10,
+                                paddingRight: 5,
+                              }}>
+                              <Text style={{color: 'gray'}}>{model}</Text>
+                            </View>
+                            <View
+                              style={{
+                                borderEndWidth: 1,
+                                borderEndColor: 'gray',
+                                paddingHorizontal: 5,
+                              }}>
+                              <Text style={{color: 'gray'}}>{color}</Text>
+                            </View>
+                            <View
+                              style={{
+                                borderEndColor: 'gray',
+                                paddingHorizontal: 5,
+                                borderLeftWidth: 0.2,
+                              }}>
+                              <Text style={{color: 'gray'}}>
+                                {model}-stroke
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+
+                    <View
+                      style={{
+                        paddingTop: 15,
+                        paddingLeft: 10,
+                        flexDirection: 'row',
+                      }}>
+                      <View
+                        style={{
+                          width: '80%',
+                          backgroundColor: 'dodgerblue',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          paddingVertical: 7,
+                          borderRadius: 5,
+                        }}>
+                        <Icon
+                          name="star"
+                          type="FontAwesome"
+                          style={{fontSize: 13, color: 'white'}}
+                        />
+                        <Text
+                          style={{
+                            color: 'white',
+                            paddingLeft: 10,
+                            fontSize: 15,
+                          }}>
+                          Feature This Ad
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity
+                        onPress={() => this.RBSheet1.open()}
+                        activeOpacity={0.6}
+                        style={{width: '17%'}}>
+                        <View
+                          style={{
+                            backgroundColor: 'lightgray',
+                            marginLeft: 10,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingVertical: 7,
+                            borderRadius: 5,
+                          }}>
+                          <Icon
+                            name="dots-three-horizontal"
+                            type="Entypo"
+                            style={{fontSize: 20, color: 'gray'}}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text
+                      style={{
+                        color: 'gray',
+                        paddingLeft: 10,
+                        paddingVertical: 8,
+                      }}>
+                      Ad will expire in 45 days
+                    </Text>
                   </View>
                 </View>
-
-                <ImageLoad
-                  style={{width: 80, height: 80, borderRadius: 100}}
-                  loadingStyle={{size: 'large', color: 'blue'}}
-                  source={{uri: profile}}
-                  borderRadius={100}
-                  placeholderStyle={{width: 80, height: 80, borderRadius: 100}}
-                />
-
-                <Text
-                  allowFontScaling={false}
-                  style={{
-                    color: 'black',
-                    fontSize: 16,
-                    marginTop: 5,
-                    fontFamily: 'DMSans-Bold',
-                  }}
-                  numberOfLines={1}>
-                  {name}
-                </Text>
-
-                <Text
-                  allowFontScaling={false}
-                  style={{
-                    color: '#235fa9',
-                    fontSize: 12,
-                    fontFamily: 'DMSans-Bold',
-                  }}>
-                  ${price} / hr
-                </Text>
               </TouchableOpacity>
             }
           </View>,
@@ -728,7 +963,21 @@ class Home extends React.Component {
               </View>
             </View>
 
-            {this.createtable1()}
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: 'bold',
+                fontSize: 22,
+                paddingTop: 20,
+              }}>
+              Public Ads
+            </Text>
+            <ScrollView
+              style={{}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {this.createtable1()}
+            </ScrollView>
 
             <View
               style={{
@@ -1259,6 +1508,77 @@ class Home extends React.Component {
             </ScrollView>
           </View>
         </ScrollView>
+
+        <RBSheet
+          ref={ref => {
+            this.RBSheet1 = ref;
+          }}
+          height={110}
+          openDuration={200}
+          customStyles={{
+            container: {
+              paddingVertical: 10,
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{marginTop: 10}}>
+              <TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingLeft: 20,
+                    paddingBottom: 16,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Icon
+                    name="pencil"
+                    type="SimpleLineIcons"
+                    color="white"
+                    style={{fontSize: 20, color: 'gray'}}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: '#232323',
+                      fontWeight: 'bold',
+                      marginLeft: 25,
+                    }}>
+                    Edit
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingLeft: 20,
+                    paddingTop: 15,
+                  }}>
+                  <Icon
+                    name="delete"
+                    type="AntDesign"
+                    color="white"
+                    style={{fontSize: 20, color: 'gray'}}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: '#232323',
+                      fontWeight: 'bold',
+                      marginLeft: 25,
+                    }}>
+                    Remove
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
       </View>
     );
   }
