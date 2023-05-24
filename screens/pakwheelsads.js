@@ -8,6 +8,17 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 import pakwheelsbottomtab from '../screens/pakwheelsbottomtab';
 import {Actions, Lightbox} from 'react-native-router-flux';
 import {Icon} from 'native-base';
@@ -46,6 +57,7 @@ class pakwheelsads extends React.Component {
       name: '',
       mobile: '',
       color: '',
+      spinner: false,
     };
   }
 
@@ -102,6 +114,10 @@ class pakwheelsads extends React.Component {
 
   Remove_Ads = () => {
     this.RBSheet1.close();
+
+    this.setState({
+      spinner: true,
+    });
     let uploaddata = new FormData();
 
     uploaddata.append('ad_remove', this.state.id_for_remove_ad);
@@ -126,6 +142,9 @@ class pakwheelsads extends React.Component {
         if (record != 'fail') {
           this.My_Ads();
           console.log(record);
+          this.setState({
+            spinner: false,
+          });
         } else {
           this.setState({});
         }
@@ -164,6 +183,10 @@ class pakwheelsads extends React.Component {
   }
 
   reactivate_ad = val => {
+    this.setState({
+      spinner: true,
+    });
+
     let uploaddata = new FormData();
     console.log('Reactivateeeeeeeeeeeee IDDDD', val);
 
@@ -187,6 +210,9 @@ class pakwheelsads extends React.Component {
         if (record != 'fail') {
           this.My_Ads();
           console.log(record);
+          this.setState({
+            spinner: false,
+          });
         } else {
           this.setState({
             data5: [],
@@ -688,7 +714,23 @@ class pakwheelsads extends React.Component {
                             paddingLeft: 10,
                             flexDirection: 'row',
                           }}>
-                          <View
+                          <TouchableOpacity
+                            onPress={() =>
+                              Actions.Edit_My_Ads({
+                                id_for_remove_ad: id,
+                                userid: userid,
+                                location: location,
+                                model: model,
+                                RegisteredIn: registeredIn,
+                                color: color,
+                                kmsdriven: kms,
+                                price: price,
+                                description: desc,
+                                name1: name,
+                                mobile: phone,
+                                img: profile,
+                              })
+                            }
                             style={{
                               width: '48%',
                               backgroundColor: 'lightgray',
@@ -711,7 +753,7 @@ class pakwheelsads extends React.Component {
                               }}>
                               Edit
                             </Text>
-                          </View>
+                          </TouchableOpacity>
 
                           <TouchableOpacity
                             onPress={() => {
@@ -778,32 +820,6 @@ class pakwheelsads extends React.Component {
           <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
             My Ads
           </Text>
-        </View>
-
-        <View
-          style={{
-            width: width,
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            borderBottomColor: 'gray',
-            borderBottomWidth: 0.5,
-            shadowOffset: 10,
-            shadowOpacity: 10,
-            shadowColor: 'gray',
-            elevation: 10,
-            justifyContent: 'space-between',
-          }}>
-          <View>
-            <Text style={{color: 'gray', fontSize: 17}}>Active (1)</Text>
-          </View>
-          <View>
-            <Text style={{color: 'gray', fontSize: 17}}>Pending (0)</Text>
-          </View>
-          <View>
-            <Text style={{color: 'gray', fontSize: 17}}>Removed (0)</Text>
-          </View>
         </View>
 
         <View
@@ -962,6 +978,46 @@ class pakwheelsads extends React.Component {
               </View>
             )}
           </ScrollView>
+        )}
+
+        {this.state.spinner == true && (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(2, 2, 2, 0.8)',
+              position: 'absolute',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: width / 2.5,
+                height: height / 9 - 20,
+                backgroundColor: 'white',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 5,
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 1},
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+                elevation: 5,
+                borderRadius: 6,
+              }}>
+              <UIActivityIndicator style={{}} color="gray" />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: 'gray',
+                  fontWeight: 'bold',
+                  textAlign: 'left',
+                  marginRight: 10,
+                }}>
+                Loading...
+              </Text>
+            </View>
+          </View>
         )}
 
         {/* Here Starts the RBSheet */}
