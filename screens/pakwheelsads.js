@@ -232,7 +232,7 @@ class pakwheelsads extends React.Component {
 
     let user = await AsyncStorage.getItem('user');
     let parsed = JSON.parse(user);
-    console.log('kkkkkkkkkkkk', user);
+    console.log('User Async Storage idddddddddddddddd', user);
     let id = parsed[0].id;
     this.setState({
       id: id,
@@ -265,11 +265,18 @@ class pakwheelsads extends React.Component {
         console.log('resssssssssssssssssssssss', record);
 
         if (record != 'fail') {
+          let counting_active = record[0].counting_active;
+          let counting_removed = record[0].counting_removed;
+
+          this.setState({
+            counting_active: counting_active,
+            counting_removed: counting_removed,
+          });
           this.setState({
             data5: record,
             skalton: false,
           });
-          console.log(record);
+          // console.log(record);
         } else {
           this.setState({
             data5: [],
@@ -316,6 +323,7 @@ class pakwheelsads extends React.Component {
                     onPress={() =>
                       Actions.ad_details({
                         name1: name,
+                        price:price,
                       })
                     }>
                     <View style={{backgroundColor: 'white'}}>
@@ -813,12 +821,37 @@ class pakwheelsads extends React.Component {
       <View style={{flex: 1}}>
         <View
           style={{
-            backgroundColor: '#050b7f',
-            alignItems: 'center',
+            flexDirection: 'row',
+            backgroundColor: '#064189',
             paddingVertical: 10,
+            paddingHorizontal: 20,
+            alignItems: 'center',
+            justifyContent:'space-between',
           }}>
-          <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+          <Icon
+            name="arrowleft"
+            type="AntDesign"
+            style={{color: 'white'}}
+          />
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 17,
+              fontWeight: 'bold',
+              // paddingLeft: 35,
+            }}>
             My Ads
+          </Text>
+
+
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 17,
+              fontWeight: 'bold',
+              // paddingLeft: 35,
+            }}>
+            
           </Text>
         </View>
 
@@ -851,7 +884,7 @@ class pakwheelsads extends React.Component {
                     ? styles.in_active_text
                     : styles.active_text
                 }>
-                Active
+                Active ({this.state.counting_active})
               </Text>
             </View>
           </TouchableOpacity>
@@ -891,7 +924,7 @@ class pakwheelsads extends React.Component {
                     ? styles.in_active_text
                     : styles.active_text
                 }>
-                Removed
+                Removed ({this.state.counting_removed})
               </Text>
             </View>
           </TouchableOpacity>

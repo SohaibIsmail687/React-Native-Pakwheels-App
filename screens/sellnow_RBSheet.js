@@ -23,10 +23,14 @@ class sellnow_RBSheet extends React.Component {
     this.RBSheet1.open();
   };
 
+  cross_screen = () => {
+    this.RBSheet1.close();
+    Actions.pakwheelsbottomtab();
+  };
+
   render() {
     return (
       <View style={{flex: 1}}>
-
         <RBSheet
           ref={ref => {
             this.RBSheet1 = ref;
@@ -42,7 +46,7 @@ class sellnow_RBSheet extends React.Component {
           }}>
           <View>
             <View style={{marginTop: 5}}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.cross_screen()}>
                 <View
                   style={{
                     width: width / 7.8,
@@ -92,8 +96,8 @@ class sellnow_RBSheet extends React.Component {
                         backgroundColor: '#e5e5e5',
                         width: '55%',
                         alignItems: 'center',
-                        paddingVertical:10,
-                        borderRadius:50,
+                        paddingVertical: 10,
+                        borderRadius: 50,
                       }}>
                       <Icon
                         name="car"
@@ -126,8 +130,8 @@ class sellnow_RBSheet extends React.Component {
                         backgroundColor: '#e5e5e5',
                         width: '55%',
                         alignItems: 'center',
-                        paddingVertical:10,
-                        borderRadius:50,
+                        paddingVertical: 10,
+                        borderRadius: 50,
                       }}>
                       <Icon
                         name="motorcycle"
@@ -160,8 +164,8 @@ class sellnow_RBSheet extends React.Component {
                         backgroundColor: '#e5e5e5',
                         width: '55%',
                         alignItems: 'center',
-                        paddingVertical:10,
-                        borderRadius:50,
+                        paddingVertical: 10,
+                        borderRadius: 50,
                       }}>
                       <Icon
                         name="ship-wheel"

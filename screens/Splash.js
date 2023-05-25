@@ -73,7 +73,7 @@ class Splash extends React.Component {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'white',
+          backgroundColor: '#064189',
         }}>
         {this.state.touchhh == false ? (
           <View
@@ -82,10 +82,9 @@ class Splash extends React.Component {
               alignItems: 'center',
               width: '80%',
               height: '90%',
-              borderRadius:50,
             }}>
             <Image
-              source={require('../assets/Sonam.jpg')}
+              source={require('../assets/pakwheelslogo.png')}
               style={styles.textage}
               resizeMode="contain"
             />
@@ -98,7 +97,7 @@ class Splash extends React.Component {
                 alignItems: 'center',
                 width: width,
               }}>
-              {this.state.spinner == true && <SkypeIndicator color="#235fa9" />}
+              {this.state.spinner == true && <SkypeIndicator color="red" />}
             </View>
           </View>
         ) : (
@@ -111,9 +110,8 @@ class Splash extends React.Component {
 
 const styles = StyleSheet.create({
   textage: {
-    width: '90%',
-    height: '90%',
-    // tintColor: "#ac73fe",
+    width: '70%',
+    height: '70%',
   },
 });
 

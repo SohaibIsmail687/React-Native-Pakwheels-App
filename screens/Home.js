@@ -29,6 +29,11 @@ class Home extends React.Component {
     };
   }
 
+  logout = () => {
+    AsyncStorage.removeItem('user');
+    Actions.signin();
+  };
+
   componentDidMount = async () => {
     // this.backHandler = BackHandler.addEventListener(
     //   'hardwareBackPress',
@@ -37,16 +42,21 @@ class Home extends React.Component {
 
     let user = await AsyncStorage.getItem('user');
     let parsed = JSON.parse(user);
-    console.log('kkkkkkkkkkkk', user);
+    // console.log('kkkkkkkkkkkk', user);
     let id = parsed[0].id;
     this.setState({
       id: id,
     });
-    console.log('kkkkkkkkkkkk', this.state.id);
+    // console.log('kkkkkkkkkkkk', this.state.id);
     this.All_Ad();
   };
 
   All_Ad = () => {
+    let uploaddata = new FormData();
+    uploaddata.append('user_id', this.state.id);
+
+    // console.log ('AAAAAAAAAALLLLLLLLLLLLLLL ADDDDDDDDDDDDDD Id', this.state.id)
+
     let api = Connection + 'restapi.php?action=All_Ad';
     console.log('pass => ', api);
     fetch(api, {
@@ -55,7 +65,7 @@ class Home extends React.Component {
         'Content-Type': 'multipart/form-data',
         otherHeader: 'foo',
       },
-      // body: uploaddata,
+      body: uploaddata,
     })
       .then(response => response.json())
       .then(response => {
@@ -99,321 +109,104 @@ class Home extends React.Component {
         table.push(
           <View>
             {
-              // <TouchableOpacity
-              //   activeOpacity={0.8}
-              //   onPress={() =>
-              //     Actions.wheeldetails({
-              //       id:id,
-              //       userid:userid,
-              //       location:location,
-              //       model:model,
-              //       registeredIn:registeredIn,
-              //       color:color,
-              //       kms:kms,
-              //       price:price,
-              //       desc:desc,
-              //       name1: name,
-              //       phone:phone,
-              //       profile:profile,
-
-              //     })
-              //   }
-              //   style={{
-              //     alignItems: 'center',
-              //     justifyContent: 'center',
-              //     marginRight: 8,
-              //     marginTop: 10,
-              //     marginVertical: 5,
-              //     width: width / 3.2,
-              //     borderRadius: 5,
-              //     backgroundColor: 'white',
-              //     paddingVertical: 5,
-              //     shadowOffset: {width: 0, height: 2},
-              //     shadowOpacity: 0.25,
-              //     shadowRadius: 3.84,
-              //     elevation: 5,
-              //   }}>
-              //   <View
-              //     style={{
-              //       flexDirection: 'row',
-              //       alignItems: 'center',
-              //       justifyContent: 'space-between',
-              //       width: '100%',
-              //     }}>
-              //     <Text> </Text>
-
-              //     <View
-              //       style={{
-              //         flexDirection: 'row',
-              //         alignItems: 'center',
-              //         marginRight: 5,
-              //       }}>
-              //       <Text
-              //         allowFontScaling={false}
-              //         style={{
-              //           color: 'black',
-              //           fontSize: 12,
-              //           fontFamily: 'DMSans-Bold',
-              //         }}>
-              //         {name}{' '}
-              //       </Text>
-
-              //       <Icon
-              //         name="star"
-              //         type="AntDesign"
-              //         style={{color: 'gold', fontSize: 13}}
-              //       />
-              //     </View>
-              //   </View>
-
-              //   <ImageLoad
-              //     style={{width: 80, height: 80, borderRadius: 100}}
-              //     loadingStyle={{size: 'large', color: 'blue'}}
-              //     source={{uri: profile}}
-              //     borderRadius={100}
-              //     placeholderStyle={{width: 80, height: 80, borderRadius: 100}}
-              //   />
-
-              //   <Text
-              //     allowFontScaling={false}
-              //     style={{
-              //       color: 'black',
-              //       fontSize: 16,
-              //       marginTop: 5,
-              //       fontFamily: 'DMSans-Bold',
-              //     }}
-              //     numberOfLines={1}>
-              //     {name}
-              //   </Text>
-
-              //   <Text
-              //     allowFontScaling={false}
-              //     style={{
-              //       color: '#235fa9',
-              //       fontSize: 12,
-              //       fontFamily: 'DMSans-Bold',
-              //     }}>
-              //     ${price} / hr
-              //   </Text>
-              // </TouchableOpacity>
-
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
                   Actions.wheeldetails({
+                    id:id,
+                    userid:userid,
+                    location:location,
+                    model:model,
+                    registeredIn:registeredIn,
+                    color:color,
+                    kms:kms,
+                    price: price,
+                    desc:desc,
                     name1: name,
+                    phone:phone,
+                    profile:profile,
+                    
                   })
                 }>
-                <View style={{backgroundColor: 'white'}}>
+                <View
+                  style={{
+                    width: width / 1.7,
+                    marginTop: 20,
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: 'lightgray',
+                    marginRight:5,
+                  }}>
+                  <ImageLoad
+                    style={{
+                      width: '100%',
+                      height: 160,
+                      resizeMode: 'stretch',
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                    }}
+                    loadingStyle={{size: 'large', color: 'blue'}}
+                    source={{uri: profile}}
+                    borderRadius={10}
+                    placeholderStyle={{
+                      width: '100%',
+                      height: 160,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontWeight: 'bold',
+                      fontSize: 15,
+                      paddingLeft: 10,
+                      paddingTop: 5,
+                    }}>
+                    {name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 17,
+                      paddingLeft: 10,
+                      paddingTop: 5,
+                    }}>
+                    PKR <Text style={{fontWeight: 'bold'}}>{price}</Text>
+                  </Text>
+                  <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
+                    {location}
+                  </Text>
+
                   <View
                     style={{
-                      width: width / 1.1,
-                      alignSelf: 'center',
-                      backgroundColor: 'white',
-                      marginTop: 10,
-                      marginRight: 10,
-                      borderWidth: 1,
-                      borderRadius: 10,
-                      borderColor: 'lightgray',
-                      marginBottom: 5,
+                      flexDirection: 'row',
+                      paddingBottom: 15,
+                      paddingTop: 5,
+                      height: 40,
                     }}>
-                    <TouchableOpacity onPress={() => Actions.wheeldetails()}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          paddingLeft: 8,
-                          paddingTop: 8,
-                        }}>
-                        <View style={{width: '40%'}}>
-                          <ImageLoad
-                            style={{
-                              width: '100%',
-                              height: 100,
-                              resizeMode: 'stretch',
-                              borderRadius: 10,
-                            }}
-                            loadingStyle={{size: 'large', color: 'blue'}}
-                            source={{uri: profile}}
-                            borderRadius={10}
-                            placeholderStyle={{
-                              width: '100%',
-                              height: 100,
-                              borderRadius: 10,
-                            }}
-                          />
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <Icon
-                              name="eye"
-                              type="Ionicons"
-                              style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                left: 10,
-                                color: 'white',
-                                fontSize: 15,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                left: 30,
-                                color: 'white',
-                                fontSize: 12,
-                              }}>
-                              0
-                            </Text>
-
-                            <Icon
-                              name="call"
-                              type="Ionicons"
-                              style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                right: 20,
-                                color: 'white',
-                                fontSize: 15,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                right: 10,
-                                color: 'white',
-                                fontSize: 12,
-                              }}>
-                              0
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View>
-                          <Text
-                            style={{
-                              color: 'black',
-                              fontSize: 15,
-                              paddingLeft: 10,
-                            }}>
-                            {name}
-                          </Text>
-                          <Text
-                            style={{
-                              color: 'black',
-                              fontSize: 17,
-                              paddingLeft: 10,
-                            }}>
-                            PKR{' '}
-                            <Text style={{fontWeight: 'bold'}}>{price}</Text>
-                          </Text>
-                          <Text style={{color: 'gray', paddingLeft: 10}}>
-                            {location}
-                          </Text>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              paddingBottom: 15,
-                              height: 30,
-                            }}>
-                            <View
-                              style={{
-                                borderEndWidth: 1,
-                                borderEndColor: 'gray',
-                                paddingLeft: 10,
-                                paddingRight: 5,
-                              }}>
-                              <Text style={{color: 'gray'}}>{model}</Text>
-                            </View>
-                            <View
-                              style={{
-                                borderEndWidth: 1,
-                                borderEndColor: 'gray',
-                                paddingHorizontal: 5,
-                              }}>
-                              <Text style={{color: 'gray'}}>{color}</Text>
-                            </View>
-                            <View
-                              style={{
-                                borderEndColor: 'gray',
-                                paddingHorizontal: 5,
-                                borderLeftWidth: 0.2,
-                              }}>
-                              <Text style={{color: 'gray'}}>
-                                {model}-stroke
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-
                     <View
                       style={{
-                        paddingTop: 15,
-                        paddingLeft: 10,
-                        flexDirection: 'row',
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
                       }}>
-                      <View
-                        style={{
-                          width: '80%',
-                          backgroundColor: 'dodgerblue',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          paddingVertical: 7,
-                          borderRadius: 5,
-                        }}>
-                        <Icon
-                          name="star"
-                          type="FontAwesome"
-                          style={{fontSize: 13, color: 'white'}}
-                        />
-                        <Text
-                          style={{
-                            color: 'white',
-                            paddingLeft: 10,
-                            fontSize: 15,
-                          }}>
-                          Feature This Ad
-                        </Text>
-                      </View>
-
-                      <TouchableOpacity
-                        onPress={() => this.RBSheet1.open()}
-                        activeOpacity={0.6}
-                        style={{width: '17%'}}>
-                        <View
-                          style={{
-                            backgroundColor: 'lightgray',
-                            marginLeft: 10,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            paddingVertical: 7,
-                            borderRadius: 5,
-                          }}>
-                          <Icon
-                            name="dots-three-horizontal"
-                            type="Entypo"
-                            style={{fontSize: 20, color: 'gray'}}
-                          />
-                        </View>
-                      </TouchableOpacity>
+                      <Text style={{color: 'gray'}}>{model}</Text>
                     </View>
-
-                    <Text
+                    <View
                       style={{
-                        color: 'gray',
-                        paddingLeft: 10,
-                        paddingVertical: 8,
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
                       }}>
-                      Ad will expire in 45 days
-                    </Text>
+                      <Text style={{color: 'gray'}}>{kms}</Text>
+                    </View>
+                    <View
+                      style={{
+                        borderEndWidth: 1,
+                        borderEndColor: 'gray',
+                        paddingHorizontal: 10,
+                      }}>
+                      <Text style={{color: 'gray'}}>{color}</Text>
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -447,7 +240,8 @@ class Home extends React.Component {
               style={{flexDirection: 'row'}}
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              <View
+              <TouchableOpacity
+                onPress={() => this.logout()}
                 style={{
                   backgroundColor: 'white',
                   borderRadius: 20,
@@ -464,7 +258,7 @@ class Home extends React.Component {
                   }}>
                   Used Cars
                 </Text>
-              </View>
+              </TouchableOpacity>
 
               <View
                 style={{
@@ -979,255 +773,7 @@ class Home extends React.Component {
               {this.createtable1()}
             </ScrollView>
 
-            <View
-              style={{
-                width: width / 1.1,
-                alignSelf: 'center',
-                marginTop: 20,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
-                PakWheels Certified
-              </Text>
-              <Text style={{color: 'blue'}}>View All</Text>
-            </View>
-            <ScrollView
-              style={{width: width / 1.1, alignSelf: 'center'}}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity onPress={() => Actions.wheeldetails()}>
-                <View
-                  style={{
-                    width: width / 1.7,
-                    marginTop: 20,
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    borderColor: 'lightgray',
-                  }}>
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 160,
-                      resizeMode: 'stretch',
-                      borderTopLeftRadius: 10,
-                      borderTopRightRadius: 10,
-                    }}
-                    source={require('../assets/Toyota.jpg')}
-                  />
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                      paddingLeft: 10,
-                      paddingTop: 5,
-                    }}>
-                    Hyundai Elantra 2022
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: 17,
-                      paddingLeft: 10,
-                      paddingTop: 5,
-                    }}>
-                    PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
-                  </Text>
-                  <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
-                    Lahore
-                  </Text>
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingBottom: 15,
-                      paddingTop: 5,
-                      height: 40,
-                    }}>
-                    <View
-                      style={{
-                        borderEndWidth: 1,
-                        borderEndColor: 'gray',
-                        paddingHorizontal: 10,
-                      }}>
-                      <Text style={{color: 'gray'}}>2022</Text>
-                    </View>
-                    <View
-                      style={{
-                        borderEndWidth: 1,
-                        borderEndColor: 'gray',
-                        paddingHorizontal: 10,
-                      }}>
-                      <Text style={{color: 'gray'}}>82 km</Text>
-                    </View>
-                    <View
-                      style={{
-                        borderEndWidth: 1,
-                        borderEndColor: 'gray',
-                        paddingHorizontal: 10,
-                      }}>
-                      <Text style={{color: 'gray'}}>petrol</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <View
-                style={{
-                  width: width / 1.7,
-                  marginTop: 20,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: 'lightgray',
-                  marginLeft: 15,
-                }}>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: 160,
-                    resizeMode: 'stretch',
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                  }}
-                  source={require('../assets/Toyota.jpg')}
-                />
-                <Text
-                  style={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  Hyundai Elantra 2022
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 17,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
-                </Text>
-                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
-                  Lahore
-                </Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingBottom: 15,
-                    paddingTop: 5,
-                    height: 40,
-                  }}>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>2022</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>82 km</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>petrol</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: width / 1.7,
-                  marginTop: 20,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: 'lightgray',
-                  marginLeft: 15,
-                }}>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: 160,
-                    resizeMode: 'stretch',
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                  }}
-                  source={require('../assets/Toyota.jpg')}
-                />
-                <Text
-                  style={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  Hyundai Elantra 2022
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 17,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
-                </Text>
-                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
-                  Lahore
-                </Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingBottom: 15,
-                    paddingTop: 5,
-                    height: 40,
-                  }}>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>2022</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>82 km</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>petrol</Text>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
-
-            <View
+            {/* <View
               style={{
                 width: width / 1.1,
                 alignSelf: 'center',
@@ -1331,181 +877,7 @@ class Home extends React.Component {
                   </View>
                 </View>
               </View>
-
-              <View
-                style={{
-                  width: width / 1.7,
-                  marginTop: 20,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: 'lightgray',
-                  marginLeft: 15,
-                }}>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: 160,
-                    resizeMode: 'stretch',
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                  }}
-                  source={require('../assets/Toyota.jpg')}
-                />
-                <Icon
-                  name="star-box"
-                  type="MaterialCommunityIcons"
-                  style={{
-                    position: 'absolute',
-                    top: 10,
-                    left: -5,
-                    color: 'maroon',
-                    fontSize: 30,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  Hyundai Elantra 2022
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 17,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
-                </Text>
-                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
-                  Lahore
-                </Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingBottom: 15,
-                    paddingTop: 5,
-                    height: 40,
-                  }}>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>2022</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>82 km</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>petrol</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  width: width / 1.7,
-                  marginTop: 20,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: 'lightgray',
-                  marginLeft: 15,
-                }}>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: 160,
-                    resizeMode: 'stretch',
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                  }}
-                  source={require('../assets/Toyota.jpg')}
-                />
-                <Icon
-                  name="star-box"
-                  type="MaterialCommunityIcons"
-                  style={{
-                    position: 'absolute',
-                    top: 10,
-                    left: -5,
-                    color: 'maroon',
-                    fontSize: 30,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  Hyundai Elantra 2022
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 17,
-                    paddingLeft: 10,
-                    paddingTop: 5,
-                  }}>
-                  PKR <Text style={{fontWeight: 'bold'}}>69.3 lacs</Text>
-                </Text>
-                <Text style={{color: 'gray', paddingLeft: 10, paddingTop: 7}}>
-                  Lahore
-                </Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingBottom: 15,
-                    paddingTop: 5,
-                    height: 40,
-                  }}>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>2022</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>82 km</Text>
-                  </View>
-                  <View
-                    style={{
-                      borderEndWidth: 1,
-                      borderEndColor: 'gray',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{color: 'gray'}}>petrol</Text>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
+            </ScrollView> */}
           </View>
         </ScrollView>
 

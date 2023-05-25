@@ -15,6 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import ToggleSwitch from 'toggle-switch-react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Toast from 'react-native-simple-toast';
+import CheckBox from '@react-native-community/checkbox';
 import Dialog, {
   SlideAnimation,
   DialogContent,
@@ -58,10 +59,169 @@ class sale_car extends React.Component {
       mobile: '',
       color: '',
       data: [],
+      text1: 1,
+      text2: 1,
+      text3: 1,
+      text4: 1,
+      fuel: '',
+      engine: '',
+      transmission: '',
+      assembly: '',
+      feature_database_array:[],
+      feature_array: [
+        {
+          name: 'Air Bugs',
+          id: '1',
+        },
+        {
+          name: 'DVD Player',
+          id: '2',
+        },
+      ],
     };
   }
 
+
+done=()=>{
+  this.Feature_RBSheet.close()
+  console.log('featureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',this.state.feature_database_array)
+}
+
+
+  selected_time = (val, val1) => {
+
+
+
+
+  
+    
+    
+    
+    
+    
+        let record1 = this.state.feature_array
+        let len = record1.length
+        let boxes = "box" + val;
+    
+     
+        
+          if (this.state[boxes] == false) {
+    
+            this.setState({ [boxes]: true })
+        
+    this.state.feature_database_array.push(val1)
+    
+                
+       
+         
+    
+    
+    
+          } else {
+            this.setState({ [boxes]: false })
+    
+            let index1 = this.state.feature_database_array.findIndex(x=>x.id==val);
+           
+    
+            console.log('index111111111',index1)
+        setTimeout(() => {
+            this.state.feature_database_array.splice(index1, 1)
+         
+    
+            this.setState({
+              feature_database_array:this.state.feature_database_array,
+              
+           
+    
+            })
+        }, 100);
+    
+           
+          }
+    
+     
+    
+    
+      }
+
+
+
+
+
+
+
+
+  feature_list = () => {
+    let table = [];
+    let record = this.state.feature_array;
+    let len = record.length;
+
+    if (record != 'fail') {
+      for (let i = 0; i < len; i++) {
+        let name = record[i].name;
+        let id = record[i].id;
+        let boxes = "box" + id;
+        console.log('boxesboxesboxesboxesboxes',boxes)
+
+        table.push(
+          <View>
+            {
+              <TouchableOpacity >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems:'center',
+                    justifyContent:'space-between',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>{name}</Text>
+
+                  <CheckBox
+                    disabled={false}
+                    value={this.state[boxes] == true ? true : false}
+                    onValueChange={() =>
+                      this.selected_time(id, name)
+                    }
+                    tintColors={{true: '#09448D', false: 'gray'}}
+                  />
+                </View>
+              </TouchableOpacity>
+            }
+          </View>,
+        );
+      }
+      return table;
+    } else {
+      let img = [];
+      img.push(
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          {<View></View>}
+        </View>,
+      );
+      return img;
+    }
+  };
+
   componentDidMount = async () => {
+
+
+
+
+    let record = this.state.feature_array;
+    let len = record.length;
+
+    
+      for (let i = 0; i < len; i++) {
+        let name = record[i].name;
+        let id = record[i].id;
+        let boxes = "box" + id;
+        this.setState({ [boxes]: false })
+      }
     // this.backHandler = BackHandler.addEventListener(
     //   'hardwareBackPress',
     //   this.backAction,
@@ -110,6 +270,26 @@ class sale_car extends React.Component {
       color: color_val,
     });
     this.Body_Color_RBSheet.close();
+  };
+
+  select_description = desc_val => {
+    if (this.state.description == '') {
+      this.setState({
+        description: desc_val,
+      });
+    } else {
+      let multi_desc = this.state.description + ', ' + desc_val;
+      this.setState({
+        description: multi_desc,
+      });
+    }
+  };
+
+  select_fuel = fuel_val => {
+    this.setState({
+      fuel: fuel_val,
+    });
+    this.Fuel_RBSheet.close();
   };
 
   uploadimage1 = async () => {
@@ -256,7 +436,7 @@ class sale_car extends React.Component {
     uploaddata.append('price', price);
     uploaddata.append('description', description);
     uploaddata.append('name', name);
-    uploaddata.append('mobile', mobile); 
+    uploaddata.append('mobile', mobile);
 
     let api = Connection + 'restapi.php?action=Insert_Ads';
     console.log('pass => ', api);
@@ -296,6 +476,56 @@ class sale_car extends React.Component {
       });
   };
 
+  changebtn(value, val) {
+    this.setState({
+      transmission: val,
+    });
+
+    if (this.state[value] == 2) {
+      this.setState({
+        text1: 1,
+        text2: 1,
+
+        [value]: 2,
+      });
+    } else {
+      this.setState({
+        text1: 1,
+        text2: 1,
+
+        [value]: 2,
+      });
+    }
+    setTimeout(() => {
+      // this.My_Ads();
+    }, 100);
+  }
+
+  changebtn2(value, val) {
+    this.setState({
+      assembly: val,
+    });
+
+    if (this.state[value] == 2) {
+      this.setState({
+        text3: 1,
+        text4: 1,
+
+        [value]: 2,
+      });
+    } else {
+      this.setState({
+        text3: 1,
+        text4: 1,
+
+        [value]: 2,
+      });
+    }
+    setTimeout(() => {
+      // this.My_Ads();
+    }, 100);
+  }
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -308,7 +538,12 @@ class sale_car extends React.Component {
               paddingHorizontal: 20,
               alignItems: 'center',
             }}>
-            <Icon onPress={()=>Actions.pakwheelsads()} name="arrowleft" type="AntDesign" style={{color: 'white'}} />
+            <Icon
+              onPress={() => Actions.pop()}
+              name="arrowleft"
+              type="AntDesign"
+              style={{color: 'white'}}
+            />
             <Text
               style={{
                 color: 'white',
@@ -319,13 +554,6 @@ class sale_car extends React.Component {
               Sell Your Car
             </Text>
           </View>
-
-          {/* <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={{width: width / 1.1, alignSelf: 'center'}}>
-            {this.createlist()}
-          </ScrollView> */}
 
           {this.state.img == null ? (
             <View
@@ -874,7 +1102,8 @@ class sale_car extends React.Component {
             }}
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
-            <View
+            <TouchableOpacity
+              onPress={() => this.select_description('Alloy Rims')}
               style={{
                 backgroundColor: '#f4f2f2',
                 borderRadius: 20,
@@ -890,9 +1119,10 @@ class sale_car extends React.Component {
                 }}>
                 Alloy Rims
               </Text>
-            </View>
+            </TouchableOpacity>
 
-            <View
+            <TouchableOpacity
+              onPress={() => this.select_description('Army Officer Car')}
               style={{
                 backgroundColor: '#f4f2f2',
                 borderRadius: 20,
@@ -907,9 +1137,10 @@ class sale_car extends React.Component {
                 }}>
                 Army Officer Car
               </Text>
-            </View>
+            </TouchableOpacity>
 
-            <View
+            <TouchableOpacity
+              onPress={() => this.select_description('Auction Sheet Available')}
               style={{
                 backgroundColor: '#f4f2f2',
                 borderRadius: 20,
@@ -924,9 +1155,12 @@ class sale_car extends React.Component {
                 }}>
                 Auction Sheet Available
               </Text>
-            </View>
+            </TouchableOpacity>
 
-            <View
+            <TouchableOpacity
+              onPress={() =>
+                this.select_description('Authorized Workshop Maintained')
+              }
               style={{
                 backgroundColor: '#f4f2f2',
                 borderRadius: 20,
@@ -941,7 +1175,7 @@ class sale_car extends React.Component {
                 }}>
                 Authorized Workshop Maintained
               </Text>
-            </View>
+            </TouchableOpacity>
           </ScrollView>
 
           <Text
@@ -960,6 +1194,437 @@ class sale_car extends React.Component {
               paddingLeft: 22,
               paddingTop: 20,
               paddingBottom: 10,
+            }}>
+            <Text style={{color: 'black', fontSize: 22, fontWeight: 'bold'}}>
+              Additional Info
+            </Text>
+          </View>
+
+          <TouchableOpacity onPress={() => this.Fuel_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.fuel == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Fuel Type
+                  </Text>
+                  {this.state.fuel != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.fuel}
+                    </Text>
+                  )}
+                </View>
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: width / 1.1,
+              alignSelf: 'center',
+              marginTop: 13,
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#f4f2f2',
+                width: '13%',
+                alignItems: 'center',
+                paddingVertical: 9,
+                borderRadius: 50,
+              }}>
+              <Icon
+                name="speedometer"
+                type="Ionicons"
+                style={{color: 'gray', fontSize: 23}}
+              />
+            </View>
+            <View
+              style={{
+                width: '83%',
+                backgroundColor: 'white',
+                marginLeft: 15,
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Engine Capacity(CC)
+              </Text>
+              <TextInput
+                style={{
+                  width: '100%',
+                  height: 38,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                  color: 'gray',
+                  textAlignVertical: 'bottom',
+                }}
+                placeholder="Specify Engine Capacity"
+                placeholderTextColor="gray"
+                onChangeText={engine => this.setState({engine})}
+                value={this.state.engine}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+                // justifyContent:'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: 40,
+                  height: 40,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  // paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: 'black',
+                      // paddingVertical: 20,
+                    }}>
+                    Transmission
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 20,
+              marginLeft: 70,
+              borderBottomWidth: 0.5,
+              borderBottomColor: 'lightgray',
+            }}>
+            <TouchableOpacity
+              onPress={() => this.changebtn('text1', 'Automatic')}
+              style={{
+                // width:'50%',
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                paddingHorizontal: 16,
+                marginTop: 20,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
+              {this.state.text1 == 2 && (
+                <Icon
+                  name="checkcircle"
+                  type="AntDesign"
+                  style={{color: 'dodgerblue', fontSize: 23}}
+                />
+              )}
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingLeft: 5,
+                }}>
+                Automatic
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => this.changebtn('text2', 'Manual')}
+              style={{
+                // width:'50%',
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                paddingHorizontal: 16,
+                marginTop: 20,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: 20,
+                flexDirection: 'row',
+              }}>
+              {this.state.text2 == 2 && (
+                <Icon
+                  name="checkcircle"
+                  type="AntDesign"
+                  style={{color: 'dodgerblue', fontSize: 23}}
+                />
+              )}
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingLeft: 5,
+                }}>
+                Manual
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+                // justifyContent:'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: 40,
+                  height: 40,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  // paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: 'black',
+                      // paddingVertical: 20,
+                    }}>
+                    Assembly
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 20,
+              marginLeft: 70,
+              borderBottomWidth: 0.5,
+              borderBottomColor: 'lightgray',
+            }}>
+            <TouchableOpacity
+              onPress={() => this.changebtn2('text3', 'Imported')}
+              style={{
+                // width:'50%',
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                paddingHorizontal: 16,
+                marginTop: 20,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
+              {this.state.text3 == 2 && (
+                <Icon
+                  name="checkcircle"
+                  type="AntDesign"
+                  style={{color: 'dodgerblue', fontSize: 23}}
+                />
+              )}
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingLeft: 5,
+                }}>
+                Imported
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => this.changebtn2('text4', 'Local')}
+              style={{
+                // width:'50%',
+                backgroundColor: '#f4f2f2',
+                borderRadius: 20,
+                paddingHorizontal: 16,
+                marginTop: 20,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: 20,
+                flexDirection: 'row',
+              }}>
+              {this.state.text4 == 2 && (
+                <Icon
+                  name="checkcircle"
+                  type="AntDesign"
+                  style={{color: 'dodgerblue', fontSize: 23}}
+                />
+              )}
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 15,
+                  paddingLeft: 5,
+                }}>
+                Local
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity onPress={() => this.Feature_RBSheet.open()}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: width / 1.1,
+                alignSelf: 'center',
+                marginTop: 10,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#f4f2f2',
+                  width: '13%',
+                  alignItems: 'center',
+                  paddingVertical: 9,
+                  borderRadius: 50,
+                }}>
+                <Icon
+                  name="hospital-building"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'gray', fontSize: 23}}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '83%',
+                  backgroundColor: 'white',
+                  marginLeft: 15,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <View>
+                  <Text
+                    style={
+                      this.state.feature_database_array == ''
+                        ? {
+                            fontWeight: 'bold',
+                            color: 'black',
+                            paddingVertical: 20,
+                          }
+                        : {color: 'black'}
+                    }>
+                    Features
+                  </Text>
+                  {this.state.feature_database_array != '' && (
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: 'bold',
+                        paddingTop: 3,
+                        paddingBottom: 10,
+                      }}>
+                      {this.state.feature_database_array}
+                    </Text>
+                  )}
+                </View>
+                <Icon
+                  name="down"
+                  type="AntDesign"
+                  style={{fontSize: 15, color: 'gray'}}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              backgroundColor: '#f4f2f2',
+              paddingLeft: 22,
+              paddingTop: 20,
+              paddingBottom: 10,
+              // marginTop:10,
             }}>
             <Text style={{color: 'black', fontSize: 22, fontWeight: 'bold'}}>
               Contact Information
@@ -2416,6 +3081,274 @@ class sale_car extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+
+        <RBSheet
+          ref={ref => {
+            this.Fuel_RBSheet = ref;
+          }}
+          height={720}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  paddingLeft: 20,
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  Select Fuel Type
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => this.select_fuel('Petrol')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Petrol</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_fuel('Diesel')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Diesel</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_fuel('Hybrid')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Hybrid</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_fuel('CNG')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>CNG</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_fuel('LPG')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>LPG</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_fuel('Electric')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Electric</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </RBSheet>
+
+        {/* Here starts the Feature RBSHEET */}
+
+        <RBSheet
+          ref={ref => {
+            this.Feature_RBSheet = ref;
+          }}
+          height={720}
+          openDuration={200}
+          customStyles={{
+            container: {
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+            },
+          }}>
+          <View>
+            <View style={{}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 20,
+                  paddingVertical: 15,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: 'lightgray',
+                }}>
+                <Text style={{color: 'gray', fontWeight: 'bold'}}>
+                  Features
+                </Text>
+                <TouchableOpacity onPress={() => this.Feature_RBSheet.close()}>
+                  <Text style={{color: 'dodgerblue', fontWeight: 'bold'}}>
+                    cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {this.feature_list()}
+
+     <TouchableOpacity  onPress={()=>this.done()} >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    // borderBottomWidth: 0.5,
+                    backgroundColor: 'blue',
+                  }}>
+                  <Text style={{color: 'white'}}>Done</Text>
+                </View>
+              </TouchableOpacity>
+
+
+
+              {/* <TouchableOpacity onPress={() => this.select_model('Air Bags')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Air Bags</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('DVD Player')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>DVD Player</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('Cassette')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Cassette</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_model('Air Conditioning')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Air Conditioning</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.select_model('Immobilizer Key')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Immobilizer Key</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.select_model('Electric')}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 1.1,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: 'lightgray',
+                  }}>
+                  <Text style={{color: 'gray'}}>Electric</Text>
+                </View>
+              </TouchableOpacity> */}
             </View>
           </View>
         </RBSheet>

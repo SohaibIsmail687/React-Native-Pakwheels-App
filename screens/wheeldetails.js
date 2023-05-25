@@ -7,6 +7,17 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 import pakwheelsbottomtab from '../screens/pakwheelsbottomtab';
 import Home from '../screens/Home';
 import {Actions, Lightbox} from 'react-native-router-flux';
@@ -14,13 +25,135 @@ import {Icon} from 'native-base';
 import {ScrollView} from 'react-native-gesture-handler';
 import ImageLoad from 'react-native-image-placeholder';
 import {Call} from 'react-native-openanything';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Connection from '../connection';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
 class wheeldetails extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      spinner: false,
+      my_like: false,
+    };
+  }
+
+  componentDidMount = async () => {
+    let user = await AsyncStorage.getItem('user');
+    let parsed = JSON.parse(user);
+    console.log('Local Storage Data', user);
+    let id = parsed[0].id;
+    this.setState({
+      id: id,
+    });
+    this.get_liked_ad();
+  };
+
   call = () => {
     Call(this.props.phone).catch(err => console.error(err));
+  };
+
+  get_liked_ad = () => {
+    let uploaddata = new FormData();
+    uploaddata.append('ad_id', this.props.id);
+    uploaddata.append('user_id', this.state.id);
+
+    let api = Connection + 'restapi.php?action=get_liked_ad';
+
+    console.log('pass => ', api);
+    fetch(api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+      body: uploaddata,
+    })
+      .then(response => response.json())
+      .then(response => {
+        let record = response.response;
+        console.log('Record Responseeeeeeeeeeee', response);
+        if (record != 'fail') {
+          this.setState({
+            my_like: true,
+            spinner: false,
+          });
+        } else {
+          this.setState({
+            my_like: false,
+            spinner: false,
+          });
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  Like_Station = () => {
+    this.setState({
+      my_like: true, //unlike the ad next time
+      spinner: true,
+    });
+
+    let uploaddata = new FormData();
+    uploaddata.append('ad_id', this.props.id);
+    uploaddata.append('user_id', this.state.id);
+    let api = Connection + 'restapi.php?action=ad_like';
+
+    fetch(api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+      body: uploaddata,
+    })
+      .then(response => response.json())
+      .then(response => {
+        let record = response.response;
+        if (record != 'fail') {
+          this.get_liked_ad();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  Unlike_Station = () => {
+    this.setState({
+      my_like: false, //Like the ad next time
+      spinner: true,
+    });
+
+    let uploaddata = new FormData();
+    uploaddata.append('ad_id', this.props.id);
+    uploaddata.append('user_id', this.state.id);
+    let api = Connection + 'restapi.php?action=ad_unlike';
+
+    fetch(api, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+      body: uploaddata,
+    })
+      .then(response => response.json())
+      .then(response => {
+        let record = response.response;
+        if (record != 'fail') {
+          this.get_liked_ad();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   render() {
@@ -105,25 +238,49 @@ class wheeldetails extends React.Component {
                 />
               </View>
 
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 50,
-                  width: '12%',
-                  height: 40,
-                  marginLeft: 20,
-                }}>
-                <Icon
-                  name="heart"
-                  type="AntDesign"
+              {this.state.my_like == false ? (
+                <TouchableOpacity
+                  onPress={() => this.Like_Station()}
                   style={{
-                    color: 'lightgray',
-                    fontSize: 21,
-                  }}
-                />
-              </View>
+                    backgroundColor: 'white',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
+                    width: '12%',
+                    height: 40,
+                    marginLeft: 20,
+                  }}>
+                  <Icon
+                    name="heart"
+                    type="AntDesign"
+                    style={{
+                      color: 'lightgray',
+                      fontSize: 21,
+                    }}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => this.Unlike_Station()}
+                  style={{
+                    backgroundColor: 'white',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 50,
+                    width: '12%',
+                    height: 40,
+                    marginLeft: 20,
+                  }}>
+                  <Icon
+                    name="heart"
+                    type="AntDesign"
+                    style={{
+                      color: 'red',
+                      fontSize: 21,
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
 
@@ -1082,6 +1239,46 @@ class wheeldetails extends React.Component {
             </Text>
           </View>
         </View>
+
+        {this.state.spinner == true && (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(2, 2, 2, 0.8)',
+              position: 'absolute',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: width / 2.5,
+                height: height / 9 - 20,
+                backgroundColor: 'white',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 5,
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 1},
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+                elevation: 5,
+                borderRadius: 6,
+              }}>
+              <UIActivityIndicator style={{}} color="gray" />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: 'gray',
+                  fontWeight: 'bold',
+                  textAlign: 'left',
+                  marginRight: 10,
+                }}>
+                Loading...
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
     );
   }
