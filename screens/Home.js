@@ -29,11 +29,6 @@ class Home extends React.Component {
     };
   }
 
-  logout = () => {
-    AsyncStorage.removeItem('user');
-    Actions.signin();
-  };
-
   componentDidMount = async () => {
     // this.backHandler = BackHandler.addEventListener(
     //   'hardwareBackPress',
@@ -197,7 +192,7 @@ class Home extends React.Component {
                         borderEndWidth: 1,
                         borderEndColor: 'gray',
                         paddingLeft: 10,
-                        paddingRight:5,
+                        paddingRight: 5,
                       }}>
                       <Text style={{color: 'gray'}}>{model}</Text>
                     </View>
@@ -251,7 +246,6 @@ class Home extends React.Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
-                onPress={() => this.logout()}
                 style={{
                   backgroundColor: 'white',
                   borderRadius: 20,

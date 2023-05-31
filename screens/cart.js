@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageLoad from 'react-native-image-placeholder';
 import Connection from '../connection';
 import pakwheelsbottomtab from './pakwheelsbottomtab';
+import products_screen from './products_screen';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -236,50 +237,42 @@ class cart extends React.Component {
     let total_amount_with_shipping = this.state.total_amount_with_shipping;
     let total_quantity = this.state.total_quantity;
 
-
     // if (this.state.multi_image_check == "true") {
-      // under develop multi images code
-      let record1 = this.state.data5
-      let len = record1.length
+    // under develop multi images code
+    let record1 = this.state.data5;
+    let len = record1.length;
 
-console.log('lenlenlenlenlen',len)
+    console.log('lenlenlenlenlen', len);
 
-      for (let i = 0; i < len; i++) {
-        let p_id = record1[i].p_id
-        let p_name = record1[i].p_name
-        let p_price = record1[i].p_price
-        let p_quantity = record1[i].p_quantity
+    for (let i = 0; i < len; i++) {
+      let p_id = record1[i].p_id;
+      let p_name = record1[i].p_name;
+      let p_price = record1[i].p_price;
+      let p_quantity = record1[i].p_quantity;
 
+      let p_id_1 = p_id + i;
+      console.log('p_idp_idp_idp_idp_idp_id', p_id);
+      uploaddata.append('p_id', p_id_1);
+      // uploaddata.append('p_name', p_name);
+      // uploaddata.append('p_price', p_price);
+      // uploaddata.append('p_quantity', p_quantity);
 
-
-        let p_id_1 = p_id +i
-console.log('p_idp_idp_idp_idp_idp_id',p_id)
-        uploaddata.append('p_id', p_id_1);
-        // uploaddata.append('p_name', p_name);
-        // uploaddata.append('p_price', p_price);
-        // uploaddata.append('p_quantity', p_quantity);
-
-
-
-        // let newImage = {
-        //   uri: path,
-        //   name: "my_photo.jpg",
-        //   type: "image/jpg",
-        // };
-        // let image = 'new_image' + i
-        // uploaddata.append('multi_image_check', "true");
-        // uploaddata.append(image, newImage);
-      }
-      /////////
-      uploaddata.append('len', len);
-    
+      // let newImage = {
+      //   uri: path,
+      //   name: "my_photo.jpg",
+      //   type: "image/jpg",
+      // };
+      // let image = 'new_image' + i
+      // uploaddata.append('multi_image_check', "true");
+      // uploaddata.append(image, newImage);
+    }
+    /////////
+    uploaddata.append('len', len);
 
     // else {
     //   uploaddata.append('multi_image_check', "false");
 
     // }
-
-
 
     console.log('user_iduser_iduser_iduser_id => ', user_id);
     console.log('Productssssssssssssssssssssssss => ', products);
@@ -566,9 +559,42 @@ console.log('p_idp_idp_idp_idp_idp_id',p_id)
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{color: 'black', fontSize: 20}}>
-              No Items added in the cart.
+            <Icon
+              name="shoppingcart"
+              type="AntDesign"
+              style={{fontSize: 70, color: 'lightgray'}}
+            />
+
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 20,
+                fontWeight: 'bold',
+                paddingTop: 10,
+              }}>
+              No Items added to cart
             </Text>
+
+            <Text style={{color: 'gray', fontSize: 15, paddingTop: 7}}>
+              Looking for Products?
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => Actions.products_screen()}
+              style={{
+                width: width / 1.1,
+                alignSelf: 'center',
+                backgroundColor: 'dodgerblue',
+                marginTop: 40,
+                paddingVertical: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 5,
+              }}>
+              <Text style={{color: 'white', fontSize: 15, fontWeight: 'bold'}}>
+                Shop Now
+              </Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
