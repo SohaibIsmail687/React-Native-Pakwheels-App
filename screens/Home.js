@@ -105,6 +105,11 @@ class Home extends React.Component {
         let phone = record1[i].phone;
         let profile1 = record1[i].photo;
         let profile = Connection + 'images/' + profile1;
+        let fuel = record1[i].fuel;
+        let engine = record1[i].engine;
+        let transmission = record1[i].transmission;
+        let assembly = record1[i].assembly;
+        let features = record1[i].features;
         console.log(profile);
         table.push(
           <View>
@@ -113,19 +118,23 @@ class Home extends React.Component {
                 activeOpacity={0.8}
                 onPress={() =>
                   Actions.wheeldetails({
-                    id:id,
-                    userid:userid,
-                    location:location,
-                    model:model,
-                    registeredIn:registeredIn,
-                    color:color,
-                    kms:kms,
+                    id: id,
+                    userid: userid,
+                    location: location,
+                    model: model,
+                    registeredIn: registeredIn,
+                    color: color,
+                    kms: kms,
                     price: price,
-                    desc:desc,
+                    desc: desc,
                     name1: name,
-                    phone:phone,
-                    profile:profile,
-                    
+                    phone: phone,
+                    profile: profile,
+                    fuel: fuel,
+                    engine: engine,
+                    transmission: transmission,
+                    assembly: assembly,
+                    features: features,
                   })
                 }>
                 <View
@@ -135,7 +144,7 @@ class Home extends React.Component {
                     borderWidth: 1,
                     borderRadius: 10,
                     borderColor: 'lightgray',
-                    marginRight:5,
+                    marginRight: 5,
                   }}>
                   <ImageLoad
                     style={{
@@ -187,7 +196,8 @@ class Home extends React.Component {
                       style={{
                         borderEndWidth: 1,
                         borderEndColor: 'gray',
-                        paddingHorizontal: 10,
+                        paddingLeft: 10,
+                        paddingRight:5,
                       }}>
                       <Text style={{color: 'gray'}}>{model}</Text>
                     </View>
@@ -195,7 +205,7 @@ class Home extends React.Component {
                       style={{
                         borderEndWidth: 1,
                         borderEndColor: 'gray',
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 5,
                       }}>
                       <Text style={{color: 'gray'}}>{kms}</Text>
                     </View>
@@ -203,9 +213,9 @@ class Home extends React.Component {
                       style={{
                         borderEndWidth: 1,
                         borderEndColor: 'gray',
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 5,
                       }}>
-                      <Text style={{color: 'gray'}}>{color}</Text>
+                      <Text style={{color: 'gray'}}>{fuel}</Text>
                     </View>
                   </View>
                 </View>

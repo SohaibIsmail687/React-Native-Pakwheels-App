@@ -74,6 +74,11 @@ class pakwheelsads extends React.Component {
     val10,
     val11,
     val12,
+    val13,
+    val14,
+    val15,
+    val16,
+    val17,
   ) => {
     this.RBSheet1.open();
     console.log('Addddddddd Idddddd', value);
@@ -90,6 +95,11 @@ class pakwheelsads extends React.Component {
       name: val10,
       mobile: val11,
       img: val12,
+      fuel:val13,
+      engine:val14,
+      transmission:val15,
+      assembly:val16,
+      features:val17,
     });
   };
 
@@ -109,6 +119,12 @@ class pakwheelsads extends React.Component {
       name1: this.state.name,
       mobile: this.state.mobile,
       img: this.state.img,
+      fuel: this.state.fuel,
+      engine: this.state.engine,
+      transmission: this.state.transmission,
+      assembly: this.state.assembly,
+      features: this.state.features,
+
     });
   };
 
@@ -312,6 +328,12 @@ class pakwheelsads extends React.Component {
         let profile1 = record1[i].photo;
         let profile = Connection + 'images/' + profile1;
         let status = record1[i].status;
+        let fuel = record1[i].fuel;
+        let engine = record1[i].engine;
+        let transmission = record1[i].transmission;
+        let assembly = record1[i].assembly;
+        let features = record1[i].features;
+
         console.log('stattttttttttttttttuuuuuuuuusssssssss', status);
         table.push(
           <View>
@@ -323,7 +345,7 @@ class pakwheelsads extends React.Component {
                     onPress={() =>
                       Actions.ad_details({
                         name1: name,
-                        price:price,
+                        price: price,
                       })
                     }>
                     <View style={{backgroundColor: 'white'}}>
@@ -522,6 +544,11 @@ class pakwheelsads extends React.Component {
                                 name,
                                 phone,
                                 profile,
+                                fuel,
+                                engine,
+                                transmission,
+                                assembly,
+                                features,
                               )
                             }
                             activeOpacity={0.6}
@@ -737,6 +764,11 @@ class pakwheelsads extends React.Component {
                                 name1: name,
                                 mobile: phone,
                                 img: profile,
+                                fuel: fuel,
+                                engine: engine,
+                                transmission: transmission,
+                                assembly: assembly,
+                                features: features,
                               })
                             }
                             style={{
@@ -826,13 +858,9 @@ class pakwheelsads extends React.Component {
             paddingVertical: 10,
             paddingHorizontal: 20,
             alignItems: 'center',
-            justifyContent:'space-between',
+            justifyContent: 'space-between',
           }}>
-          <Icon
-            name="arrowleft"
-            type="AntDesign"
-            style={{color: 'white'}}
-          />
+          <Icon name="arrowleft" type="AntDesign" style={{color: 'white'}} />
           <Text
             style={{
               color: 'white',
@@ -843,16 +871,13 @@ class pakwheelsads extends React.Component {
             My Ads
           </Text>
 
-
           <Text
             style={{
               color: 'white',
               fontSize: 17,
               fontWeight: 'bold',
               // paddingLeft: 35,
-            }}>
-            
-          </Text>
+            }}></Text>
         </View>
 
         <View

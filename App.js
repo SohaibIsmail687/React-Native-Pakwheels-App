@@ -11,6 +11,13 @@ import signin from './screens/signin';
 import signup from './screens/signup';
 import Splash from './screens/Splash';
 import Edit_My_Ads from './screens/Edit_My_Ads';
+import sale_auto_parts from './screens/sale_auto_parts';
+import profile from './screens/profile';
+import products_screen from './screens/products_screen';
+import product_details from './screens/product_details';
+import cart from './screens/cart';
+import update_profile from './screens/update_profile';
+import orders from './screens/orders';
 
 console.disableYellowBox = true;
 export default function App() {
@@ -22,7 +29,14 @@ export default function App() {
           component={Splash}
           title="Splash"
           hideNavBar={true}
-          initial
+          // initial
+        />
+        <Scene
+          key="cart"
+          component={cart}
+          title="cart"
+          hideNavBar={true}
+          // initial
         />
         <Scene
           key="signin"
@@ -37,6 +51,20 @@ export default function App() {
           title="signup"
           hideNavBar={true}
           // initial
+        />
+        <Scene
+          key="profile"
+          component={profile}
+          title="profile"
+          hideNavBar={true}
+          // initial
+        />
+        <Scene
+          key="update_profile"
+          component={update_profile}
+          title="update_profile"
+          hideNavBar={true}
+          initial
         />
         <Scene
           key="Home"
@@ -64,7 +92,7 @@ export default function App() {
           component={pakwheelsbottomtab}
           title="pakwheelsbottomtab"
           hideNavBar={true}
-          // initial
+          initial
         />
         <Scene
           key="ad_details"
@@ -81,9 +109,41 @@ export default function App() {
           // initial
         />
         <Scene
+          key="sale_auto_parts"
+          component={sale_auto_parts}
+          title="sale_auto_parts"
+          hideNavBar={true}
+          // initial
+        />
+
+        <Scene
+          key="products_screen"
+          component={products_screen}
+          title="products_screen"
+          hideNavBar={true}
+          // initial
+        />
+
+        <Scene
+          key="product_details"
+          component={product_details}
+          title="product_details"
+          hideNavBar={true}
+          // initial
+        />
+
+        <Scene
           key="Edit_My_Ads"
           component={Edit_My_Ads}
           title="Edit_My_Ads"
+          hideNavBar={true}
+          // initial
+        />
+
+        <Scene
+          key="orders"
+          component={orders}
+          title="orders"
           hideNavBar={true}
           // initial
         />

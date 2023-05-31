@@ -153,7 +153,7 @@ class sellnow_RBSheet extends React.Component {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => Actions.sale_auto_parts()}>
                   <View
                     style={{
                       alignItems: 'center',

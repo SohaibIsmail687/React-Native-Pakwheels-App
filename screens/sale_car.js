@@ -67,7 +67,7 @@ class sale_car extends React.Component {
       engine: '',
       transmission: '',
       assembly: '',
-      feature_database_array:[],
+      feature_database_array: [],
       feature_array: [
         {
           name: 'Air Bugs',
@@ -77,79 +77,60 @@ class sale_car extends React.Component {
           name: 'DVD Player',
           id: '2',
         },
+        {
+          name: 'Air Conditioning',
+          id: '3',
+        },
+        {
+          name: 'Immobilizer Key',
+          id: '4',
+        },
+        {
+          name: 'Alloy Rims',
+          id: '5',
+        },
+        {
+          name: 'Navigation System',
+          id: '6',
+        },
       ],
     };
   }
 
-
-done=()=>{
-  this.Feature_RBSheet.close()
-  console.log('featureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',this.state.feature_database_array)
-}
-
+  done = () => {
+    this.Feature_RBSheet.close();
+    console.log(
+      'featureeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      this.state.feature_database_array,
+    );
+  };
 
   selected_time = (val, val1) => {
+    let record1 = this.state.feature_array;
+    let len = record1.length;
+    let boxes = 'box' + val;
 
+    if (this.state[boxes] == false) {
+      this.setState({[boxes]: true});
 
+      this.state.feature_database_array.push(val1);
+    } else {
+      this.setState({[boxes]: false});
 
+      let index1 = this.state.feature_database_array.findIndex(
+        x => x.id == val,
+      );
 
-  
-    
-    
-    
-    
-    
-        let record1 = this.state.feature_array
-        let len = record1.length
-        let boxes = "box" + val;
-    
-     
-        
-          if (this.state[boxes] == false) {
-    
-            this.setState({ [boxes]: true })
-        
-    this.state.feature_database_array.push(val1)
-    
-                
-       
-         
-    
-    
-    
-          } else {
-            this.setState({ [boxes]: false })
-    
-            let index1 = this.state.feature_database_array.findIndex(x=>x.id==val);
-           
-    
-            console.log('index111111111',index1)
-        setTimeout(() => {
-            this.state.feature_database_array.splice(index1, 1)
-         
-    
-            this.setState({
-              feature_database_array:this.state.feature_database_array,
-              
-           
-    
-            })
-        }, 100);
-    
-           
-          }
-    
-     
-    
-    
-      }
+      console.log('index111111111', index1);
+      setTimeout(() => {
+        this.state.feature_database_array.splice(index1, 1);
 
-
-
-
-
-
-
+        this.setState({
+          feature_database_array: this.state.feature_database_array,
+        });
+      }, 100);
+    }
+  };
 
   feature_list = () => {
     let table = [];
@@ -160,18 +141,18 @@ done=()=>{
       for (let i = 0; i < len; i++) {
         let name = record[i].name;
         let id = record[i].id;
-        let boxes = "box" + id;
-        console.log('boxesboxesboxesboxesboxes',boxes)
+        let boxes = 'box' + id;
+        console.log('boxesboxesboxesboxesboxes', boxes);
 
         table.push(
           <View>
             {
-              <TouchableOpacity >
+              <TouchableOpacity>
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems:'center',
-                    justifyContent:'space-between',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     width: width / 1.1,
                     alignSelf: 'center',
                     marginTop: 10,
@@ -184,9 +165,7 @@ done=()=>{
                   <CheckBox
                     disabled={false}
                     value={this.state[boxes] == true ? true : false}
-                    onValueChange={() =>
-                      this.selected_time(id, name)
-                    }
+                    onValueChange={() => this.selected_time(id, name)}
                     tintColors={{true: '#09448D', false: 'gray'}}
                   />
                 </View>
@@ -208,20 +187,15 @@ done=()=>{
   };
 
   componentDidMount = async () => {
-
-
-
-
     let record = this.state.feature_array;
     let len = record.length;
 
-    
-      for (let i = 0; i < len; i++) {
-        let name = record[i].name;
-        let id = record[i].id;
-        let boxes = "box" + id;
-        this.setState({ [boxes]: false })
-      }
+    for (let i = 0; i < len; i++) {
+      let name = record[i].name;
+      let id = record[i].id;
+      let boxes = 'box' + id;
+      this.setState({[boxes]: false});
+    }
     // this.backHandler = BackHandler.addEventListener(
     //   'hardwareBackPress',
     //   this.backAction,
@@ -420,8 +394,13 @@ done=()=>{
     let description = this.state.description;
     let name = this.state.name;
     let mobile = this.state.mobile;
+    let fuel = this.state.fuel;
+    let engine = this.state.engine;
+    let transmission = this.state.transmission;
+    let assembly = this.state.assembly;
+    let features = JSON.stringify(this.state.feature_database_array);
 
-    console.log('namenamename => ', location);
+    console.log('namenamename => ', features);
     console.log('namenamename => ', kmsdriven);
 
     this.setState({spinner: true});
@@ -437,6 +416,11 @@ done=()=>{
     uploaddata.append('description', description);
     uploaddata.append('name', name);
     uploaddata.append('mobile', mobile);
+    uploaddata.append('fuel', fuel);
+    uploaddata.append('engine', engine);
+    uploaddata.append('transmission', transmission);
+    uploaddata.append('assembly', assembly);
+    uploaddata.append('features', features);
 
     let api = Connection + 'restapi.php?action=Insert_Ads';
     console.log('pass => ', api);
@@ -3241,7 +3225,7 @@ done=()=>{
 
               {this.feature_list()}
 
-     <TouchableOpacity  onPress={()=>this.done()} >
+              <TouchableOpacity onPress={() => this.done()}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -3249,106 +3233,14 @@ done=()=>{
                     alignSelf: 'center',
                     marginTop: 10,
                     paddingVertical: 10,
-                    // borderBottomWidth: 0.5,
-                    backgroundColor: 'blue',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 10,
+                    backgroundColor: 'dodgerblue',
                   }}>
-                  <Text style={{color: 'white'}}>Done</Text>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>Done</Text>
                 </View>
               </TouchableOpacity>
-
-
-
-              {/* <TouchableOpacity onPress={() => this.select_model('Air Bags')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>Air Bags</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.select_model('DVD Player')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>DVD Player</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.select_model('Cassette')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>Cassette</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => this.select_model('Air Conditioning')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>Air Conditioning</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => this.select_model('Immobilizer Key')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>Immobilizer Key</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.select_model('Electric')}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: width / 1.1,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: 'lightgray',
-                  }}>
-                  <Text style={{color: 'gray'}}>Electric</Text>
-                </View>
-              </TouchableOpacity> */}
             </View>
           </View>
         </RBSheet>

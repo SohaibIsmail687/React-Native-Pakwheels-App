@@ -38,6 +38,7 @@ import Drawer from 'react-native-drawer';
 import pakwheelsads from '../screens/pakwheelsads';
 import ad_details from '../screens/ad_details';
 import sellnow_RBSheet from '../screens/sellnow_RBSheet';
+import profile from './profile';
 import sale_car from '../screens/sale_car';
 import {Screen} from 'react-native-screens';
 
@@ -88,9 +89,9 @@ class pakwheelsbottomtab extends React.Component {
     if (this.state.selectedbtn == '3') {
       AppComponent = sellnow_RBSheet;
     }
-    // if (this.state.selectedbtn == '4') {
-    //   AppComponent = profile;
-    // }
+    if (this.state.selectedbtn == '4') {
+      AppComponent = profile;
+    }
     // if (this.state.selectedbtn == "5") {
     //     AppComponent = Patient_Orders;
     // }
@@ -253,7 +254,7 @@ class pakwheelsbottomtab extends React.Component {
                 <Text allowFontScaling={false} style={{ fontWeight: 'bold', color: '#09448D', fontSize: 10 }}>My Order</Text>
 
               </Button> */}
-
+{/* 
                 <Button
                   verticalstyle={
                     this.state.selectedbtn == '4'
@@ -279,7 +280,7 @@ class pakwheelsbottomtab extends React.Component {
                     }}>
                     Chat
                   </Text>
-                </Button>
+                </Button> */}
 
                 <Button
                   verticalstyle={
